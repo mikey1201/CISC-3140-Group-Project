@@ -1,0 +1,39 @@
+body {
+    padding: 0;
+    margin: 0;
+    background-color: #e5e7eb;
+}
+#logo {
+    width: 40px;
+    border-radius: 8px;
+}
+#site\ header {
+    background-color: blueviolet;
+    display: flex;
+    justify-content: space-between;
+    padding-right: 36px;
+    padding-left: 36px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+#login {
+    border-radius: 8px;
+    border: 0 none;
+    color: #f9f2ff;
+    background-color: #374151;
+    cursor: pointer;
+    padding-right: 16px;
+    padding-left: 16px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+#search\ area {
+    background-color: #374151;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+#search\ bar {
+    width: 60%;
+    border-radius: 8px;
+}
