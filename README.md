@@ -6,7 +6,7 @@ This webapp will allow users to make an account and maintain a personal list of 
 ## Getting Started
 To load the repository run this command in your local project directory.
 ```bash
-git clone https://github.com/yourusername/favorite-movies-webapp.git
+git clone https://github.com/mikey1201/CISC-3140-Group-Project.git
 ```
 After you make changes be sure to commit the changes
 ```bash
