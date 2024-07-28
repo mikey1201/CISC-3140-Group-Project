@@ -6,19 +6,24 @@
     <link rel="stylesheet" href="styles/stylesheet1.css">
 </head>
 <body>
-    <div id="site header">
+    <div id="site-header">
         <img id="logo" src="images/logo.png" alt="logo">
         <button id="login" type="button">Login</button>
     </div>
-    <div id="search area">
-        <div id="search bar">
-            <label for="search text box"></label>
-            <input id="search text box" placeholder="Search for a movie.">
+    <div id="search-area">
+        <div id="search-div">
+            <label for="search-bar"></label>
+            <input type="text" id="search-bar" placeholder="Search for a movie." autocomplete="off">
+            <div id="suggestions-box">
+                <div id="suggestions" class="suggestions"></div>
+            </div>
         </div>
 
     </div>
+
     <div id="content">
 
     </div>
+    <script src="scripts/test.js"></script>
 </body>
 </html>

@@ -1,19 +1,23 @@
+/* styles.css */
 body {
     padding: 0;
     margin: 0;
     background-color: #e5e7eb;
 }
+
 #logo {
     width: 40px;
     border-radius: 8px;
 }
-#site\ header {
+
+#site-header {
     background-color: blueviolet;
     display: flex;
     justify-content: space-between;
     padding: 16px 36px;
     border-bottom: 2px solid #452262;
 }
+
 #login {
     border-radius: 8px;
     border: 1px solid #452262;
@@ -23,29 +27,91 @@ body {
     font-size: 16px;
     padding: 0 16px;
 }
-#search\ area {
+
+#search-area {
     background-color: #374151;
     display: flex;
     justify-content: center;
     padding: 10px;
     border-bottom: 2px solid #252d37;
 }
-#search\ bar {
+
+#search-div {
+    position: relative;
     display: flex;
     justify-content: center;
-    background-color: #e5e7eb;
     width: 40%;
-    height: 36px;
     border-radius: 18px;
 }
-#search\ text\ box {
-    width: 100%;
-    resize: none;
-    padding: 9px 18px;
-    border-radius: 18px;
-    background-color: #e5e7eb;
-    font-size: 16px;
-    outline: none;
-    border: none;
 
+#search-bar {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 16px;
+    background-color: #e5e7eb;
+    border: 3px solid #252d37;
+    border-radius: 18px;
+    box-sizing: border-box;
+
+}
+#suggestions-box {
+    position: absolute;
+    top: 100%; /* Position it below the search bar */
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    border-radius: 18px;
+    max-height: 200px;
+    background: #fff;
+    overflow: hidden;
+    padding: 5px 0;
+    display: none;
+}
+#suggestions {
+    width: 100%;
+    max-height: 200px;
+    display: none;
+    overflow-y: auto;
+
+}
+.suggestion-item {
+    font-family: sans-serif;
+    padding: 8px 12px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+}
+
+.suggestion-item:hover {
+    background-color: #f0f0f0;
+}
+
+
+/*Scrollbar styling*/
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+::-webkit-scrollbar-button:end:decrement {
+    height: 8%;
+    display: block;
+    background: transparent;
+
+}
+::-webkit-scrollbar-button:start:increment {
+    height: 8%;
+    display: block;
+    background: transparent;
 }
