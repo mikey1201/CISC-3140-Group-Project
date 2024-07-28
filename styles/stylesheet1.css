@@ -62,7 +62,7 @@ body {
     z-index: 1000;
     border-radius: 18px;
     border: 1px solid #252d37;
-    max-height: 200px;
+    max-height: 210px;
     background: #fff;
     overflow: hidden;
     padding: 5px 0;
@@ -70,7 +70,7 @@ body {
 }
 #suggestions {
     width: 100%;
-    max-height: 200px;
+    max-height: 210px;
     display: none;
     overflow-y: auto;
 
