@@ -1,4 +1,3 @@
-// script.js
 document.addEventListener("DOMContentLoaded", () => {
     const searchBar = document.getElementById("search-bar");
     const suggestionsContainer = document.getElementById("suggestions");
