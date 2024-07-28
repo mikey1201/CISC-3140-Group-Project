@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(response => {
             return response.json();
         })
+        //get a list of just the movie titles and filter out duplicates
         .then(data => {
             const uniqueTitles = new Set();
             movies = data
@@ -25,9 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch(error => console.error('Error loading movies:', error));
 
-
-
-
+    //on user input look for movies containing the users query
     searchBar.addEventListener("input", () => {
         console.log("Search bar input detected");
         const query = searchBar.value.toLowerCase();
@@ -38,15 +37,23 @@ document.addEventListener("DOMContentLoaded", () => {
                 movie.toLowerCase().includes(query)
             ).slice(0, 20); // Limit to 20 suggestions
             console.log("Filtered movies:", filteredMovies);
+            //add the titles to the suggestion box
             filteredMovies.forEach(movie => {
                 const suggestionItem = document.createElement('div');
                 suggestionItem.classList.add('suggestion-item')
                 suggestionItem.textContent = movie;
                 suggestionsContainer.appendChild(suggestionItem);
             })
-            suggestionsContainer.style.display = 'block';
-            suggestionsArea.style.display = 'block'
+            //display the suggestions
+            if (filteredMovies.length === 0) {
+                suggestionsContainer.style.display = 'none';
+                suggestionsArea.style.display = 'none';
+            } else { //if there are no matches hide suggestions
+                suggestionsContainer.style.display = 'block';
+                suggestionsArea.style.display = 'block'
+            }
         } else {
+            //if the search box is empty hide suggestions
             suggestionsContainer.style.display = 'none';
             suggestionsArea.style.display = 'none';
         }
