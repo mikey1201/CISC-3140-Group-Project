@@ -48,8 +48,8 @@ body {
     width: 100%;
     padding: 8px 12px;
     font-size: 16px;
-    background-color: #e5e7eb;
-    border: 3px solid #252d37;
+    background: #fff;
+    border: 1px solid #252d37;
     border-radius: 18px;
     box-sizing: border-box;
 
@@ -61,6 +61,7 @@ body {
     width: 100%;
     z-index: 1000;
     border-radius: 18px;
+    border: 1px solid #252d37;
     max-height: 200px;
     background: #fff;
     overflow: hidden;
@@ -92,7 +93,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: #fff;
     border-radius: 5px;
 }
 
