@@ -12,6 +12,10 @@ After you make changes be sure to commit the changes
 ```bash
 git commit -m "your commit message"
 ```
+Sometimes changes are not added with your commit you made need to add a file manually and commit again
+```bash
+git add file/directory
+```
 To push the change to changes to github run this command
 ```bash
 git push -u origin main
