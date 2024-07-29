@@ -87,7 +87,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-    background: #fff;
+    background: #eee;
     border-radius: 5px;
 }
 
@@ -100,7 +100,7 @@ body {
     background: #555;
 }
 ::-webkit-scrollbar-button:start:increment {
-    height: 0;
+    height: 1%;
     display: block;
     background: transparent;
 }
@@ -108,5 +108,4 @@ body {
     height: 8%;
     display: block;
     background: transparent;
-
 }
