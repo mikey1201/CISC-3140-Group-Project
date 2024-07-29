@@ -29,19 +29,26 @@ body {
 }
 
 #search-area {
+    height: 36px;
     background-color: #374151;
     display: flex;
     justify-content: center;
     padding: 10px;
     border-bottom: 2px solid #252d37;
+    position: relative;
+    overflow: visible;
 }
 
 #search-div {
-    position: relative;
+    position: absolute;
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    background: #fff;
     width: 40%;
     border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid #252d37;
 }
 
 #search-bar {
@@ -49,25 +56,13 @@ body {
     padding: 8px 12px;
     font-size: 16px;
     background: #fff;
-    border: 1px solid #252d37;
     border-radius: 18px;
     box-sizing: border-box;
+    border: none;
+    border-bottom: 1px solid #252d37;
+    outline: none;
+}
 
-}
-#suggestions-box {
-    position: absolute;
-    top: 100%; /* Position it below the search bar */
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    border-radius: 18px;
-    border: 1px solid #252d37;
-    max-height: 210px;
-    background: #fff;
-    overflow: hidden;
-    padding: 5px 0;
-    display: none;
-}
 #suggestions {
     width: 100%;
     max-height: 210px;
@@ -78,14 +73,13 @@ body {
 .suggestion-item {
     font-family: sans-serif;
     padding: 8px 12px;
-    border-bottom: 1px solid #eee;
+    border-top: 1px solid #eee;
     cursor: pointer;
 }
 
 .suggestion-item:hover {
     background-color: #f0f0f0;
 }
-
 
 /*Scrollbar styling*/
 ::-webkit-scrollbar {
@@ -105,14 +99,14 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+::-webkit-scrollbar-button:start:increment {
+    height: 0;
+    display: block;
+    background: transparent;
+}
 ::-webkit-scrollbar-button:end:decrement {
     height: 8%;
     display: block;
     background: transparent;
 
-}
-::-webkit-scrollbar-button:start:increment {
-    height: 8%;
-    display: block;
-    background: transparent;
 }
