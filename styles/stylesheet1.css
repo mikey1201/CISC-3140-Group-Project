@@ -68,7 +68,6 @@ body {
     max-height: 210px;
     display: none;
     overflow-y: auto;
-
 }
 .suggestion-item {
     font-family: sans-serif;
@@ -82,29 +81,29 @@ body {
 }
 
 /*Scrollbar styling*/
-::-webkit-scrollbar {
+#suggestions::-webkit-scrollbar {
     width: 10px;
 }
 
-::-webkit-scrollbar-track {
+#suggestions::-webkit-scrollbar-track {
     background: #eee;
     border-radius: 5px;
 }
 
-::-webkit-scrollbar-thumb {
+#suggestions::-webkit-scrollbar-thumb {
     background: #888;
     border-radius: 5px;
 }
 
-::-webkit-scrollbar-thumb:hover {
+#suggestions::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
-::-webkit-scrollbar-button:start:increment {
+#suggestions::-webkit-scrollbar-button:start:increment {
     height: 1%;
     display: block;
     background: transparent;
 }
-::-webkit-scrollbar-button:end:decrement {
+#suggestions::-webkit-scrollbar-button:end:decrement {
     height: 8%;
     display: block;
     background: transparent;
