@@ -207,3 +207,11 @@ body {
   border-radius:50%;
   background-color: red;
 }
+.myRankBar{
+  font:20px Times New Roman;
+  width:100%;
+  height:30px;
+  background:#374151;
+  padding:0px; 
+  color:white;
+}
