@@ -47,14 +47,24 @@ document.addEventListener("DOMContentLoaded", () => {
                 suggestionItem.addEventListener('click', () => {
                     const rankingArea = document.createElement('div');
                     rankingArea.className = 'ranking-area';
+
+                    // Add event listener to the parent div
                     rankingArea.addEventListener('click', () => {
                         document.body.removeChild(rankingArea);
                     });
+
                     const rankingDiv = document.createElement('div');
                     rankingDiv.className = 'ranking-div';
+
+                    // Add event listener to the child div to stop event propagation
+                    rankingDiv.addEventListener('click', (event) => {
+                        event.stopPropagation();
+                    });
+
                     rankingArea.appendChild(rankingDiv);
                     document.body.appendChild(rankingArea);
                 });
+
 
                 suggestionsContainer.appendChild(suggestionItem);
             })
