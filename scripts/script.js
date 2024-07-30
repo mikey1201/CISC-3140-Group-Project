@@ -43,6 +43,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 const suggestionItem = document.createElement('div');
                 suggestionItem.classList.add('suggestion-item')
                 suggestionItem.textContent = movie;
+                //adding popup menu
+                suggestionItem.addEventListener('click', () => {
+                    const rankingArea = document.createElement('div');
+                    rankingArea.className = 'ranking-area';
+                    rankingArea.addEventListener('click', () => {
+                        document.body.removeChild(rankingArea);
+                    });
+                    const rankingDiv = document.createElement('div');
+                    rankingDiv.className = 'ranking-div';
+                    rankingArea.appendChild(rankingDiv);
+                    document.body.appendChild(rankingArea);
+                });
+
                 suggestionsContainer.appendChild(suggestionItem);
             })
             //display the suggestions
