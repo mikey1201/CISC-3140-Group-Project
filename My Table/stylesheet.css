@@ -1,0 +1,33 @@
+th{
+  background-color: blueviolet;
+  font:30px;
+  color:white;
+  width:50%;
+  text-align: center;
+  border-collapse: collapse;
+  border-color:black;
+}
+
+.topLeft{
+  border-top-left-radius: 10px;
+}
+
+.topRight{
+  border-top-right-radius: 10px;
+}
+
+table, tr,td{
+  width:40%;
+  height:50px;
+  text-align: center;
+  border-collapse: collapse;
+}
+
+.linecolor{
+  background-color: #dfe1e7;
+}
+
+.center{
+  margin-left:auto;
+  margin-right: auto;
+}
