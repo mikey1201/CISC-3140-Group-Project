@@ -154,3 +154,56 @@ body {
     display: block;
     background: transparent;
 }
+
+#overlayDim {/*dims the screen when movieBox is open*/
+  position: fixed;
+  display:none;
+  width: 100%;
+  height: 100%;
+  background-color:rgba(0,0,0,0.5);
+  cursor: pointer;
+  top:0;
+  left:0;
+  z-index: 1;
+}
+
+.movieBox{/*movieBox to review movie*/
+  width:500px;
+  height:500px;
+  margin:4px auto;
+  z-index: 2;
+  background-color: white;
+  text-align: center;
+  position: relative;
+}
+
+.movieBox-header{
+  font-size:30px;
+  width:100%;
+  background: blueviolet;
+  text-align: center;
+  color:white;
+}
+
+.closeButton{
+  padding:7px;
+  position: absolute;
+  bottom:0;
+  right:0;
+  background-color: blueviolet;
+  color:white
+}
+
+.like{
+  height:100px;
+  width:100px;
+  border-radius:50%;
+  background-color: green;
+}
+
+.dislike{
+  height:100px;
+  width:100px;
+  border-radius:50%;
+  background-color: red;
+}
