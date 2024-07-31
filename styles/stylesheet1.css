@@ -34,7 +34,7 @@ button {
 }
 
 
-#login:active {
+button:active {
     background-color: #2a323e;
 }
 
