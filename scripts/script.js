@@ -87,6 +87,14 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 });
 
+function openBox(){/*dim screen*/
+  document.getElementById("overlayDim").style.display = "block";
+}
+
+function closeBox(){/*undim screen*/
+  document.getElementById("overlayDim").style.display = "none";
+}
+
 const friendTable = document.createElement("table");/*creates the my ranking table doesnt matter how many movies*/
 friendTable.innerHTML = "<thead><th>Freind</th><th>Movies Watched</th></thead>";
 for(display of fArray){
