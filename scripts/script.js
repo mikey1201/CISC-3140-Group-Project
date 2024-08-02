@@ -116,3 +116,21 @@ for(display of mArray){
 }
 const myListChart = document.getElementById('myListChart');
 myListChart.appendChild(listTable); /* call with <div id="ftable"></div> */
+
+
+function clickLogin() {
+    document.getElementById("loginBox").style.display = 'block';
+    document.getElementById("signupBox").style.display = 'none';
+}
+
+function clickSignUp() {
+    document.getElementById("signupBox").style.display = 'block';
+    document.getElementById("loginBox").style.display = 'none';
+}
+
+function clickClose() {
+    document.getElementById("signupBox").style.display = 'none';
+    document.getElementById("loginBox").style.display = 'none';
+
+}
+

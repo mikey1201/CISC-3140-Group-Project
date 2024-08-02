@@ -226,3 +226,31 @@ button:active {
   padding:0;
   color:white;
 }
+
+.formbox{
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 400px; 
+    height: 250px; 
+    border: 1px solid black;
+    transform: translate(-50%, -50%);
+    background-color: rgba(137, 43, 226, 0.5);
+    color: black;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .formbox#closeButton{
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 100;
+  }
+
+  .formbox h1{
+    font-size: 40px;
+  }
+
+  
