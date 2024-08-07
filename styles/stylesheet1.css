@@ -204,20 +204,6 @@ button:active {
   background-color: blueviolet;
   color:white
 }
-
-.like{
-  height:100px;
-  width:100px;
-  border-radius:50%;
-  background-color: green;
-}
-
-.dislike{
-  height:100px;
-  width:100px;
-  border-radius:50%;
-  background-color: red;
-}
 .myRankBar{
   font:20px Times New Roman;
   width:90%;
@@ -253,4 +239,31 @@ button:active {
     font-size: 40px;
   }
 
-  
+th{
+  background-color: #374151;
+  font:30px;
+  color:white;
+  width:50%;
+  text-align: center;
+  border-collapse: collapse;
+  border-color:black;
+}
+
+table,tr,td{
+  width:40%;
+  height:50px;
+  text-align: center;
+  border-collapse: collapse;
+  margin-top: 30px;
+  background-color: white;
+  border: 1px solid black; 
+}
+
+table{
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hiddenBox{
+  display: none;
+}
