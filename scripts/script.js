@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 });
 
- function buttonMovies() {
+ function buttonMovies() {/*calls the function to create my list*/
     var hiddenBox = document.getElementById("myListChart");
     if (hiddenBox.style.display === "none") {
       hiddenBox.style.display = "block";
@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function buttonFriends() {
+  function buttonFriends() {/*calls the function to create friend list*/
     const hiddenBox = document.getElementById("friendsList");
     if (hiddenBox.style.display === "none") {
       hiddenBox.style.display = "block";
