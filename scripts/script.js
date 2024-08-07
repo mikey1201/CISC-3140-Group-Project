@@ -87,44 +87,53 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 });
 
-function openBox(){/*dim screen*/
-  document.getElementById("overlayDim").style.display = "block";
-}
+ function buttonMovies() {
+    var hiddenBox = document.getElementById("myListChart");
+    if (hiddenBox.style.display === "none") {
+      hiddenBox.style.display = "block";
+    } else {
+      hiddenBox.style.display = "none";
+    }
+  }
 
-function closeBox(){/*undim screen*/
-  document.getElementById("overlayDim").style.display = "none";
-}
+  function buttonFriends() {
+    const hiddenBox = document.getElementById("friendsList");
+    if (hiddenBox.style.display === "none") {
+      hiddenBox.style.display = "block";
+    } else {
+      hiddenBox.style.display = "none";
+    }
+  }
 
-const friendTable = document.createElement("table");/*creates the my ranking table doesnt matter how many movies*/
-friendTable.innerHTML = "<thead><th>Freind</th><th>Movies Watched</th></thead>";
-for(display of fArray){
-    const newRow = document.createElement("tr");
-    const friend = document.createElement("td");
-    const movieRank = document.createElement("td");
-    friend.textContent = display.friend;
-    movieRank.textContent = display.movieRank;
-    newRow.appendChild(friend);
-    newRow.appendChild(movieRank);
-    friendTable.appendChild(newRow);
-}
-const ftable = document.getElementById('ftable');
-ftable.appendChild(friendTable);/*call with <div id="myListChart"></div> */
-
-const listTable = document.createElement("table");/*creates the friends list table doesnt matter how many friends*/
+const listTable = document.createElement("table");/*creates the my list table doesnt matter how many movies*/
 listTable.innerHTML = "<thead><th>Rank</th><th>Movies</th></thead>";
 for(display of mArray){
-    const newRow = document.createElement("tr");
-    const rank = document.createElement("td");
-    const movie = document.createElement("td");
-    rank.textContent = display.rank;
-    movie.textContent = display.movie;
-    newRow.appendChild(rank);
-    newRow.appendChild(movie);
-    listTable.appendChild(newRow);
+  const newRow = document.createElement("tr");
+  const rank = document.createElement("td");
+  const movie = document.createElement("td");
+  rank.textContent = display.rank;
+  movie.textContent = display.movie;
+  newRow.appendChild(rank);
+  newRow.appendChild(movie);
+  listTable.appendChild(newRow);
 }
 const myListChart = document.getElementById('myListChart');
-myListChart.appendChild(listTable); /* call with <div id="ftable"></div> */
+myListChart.appendChild(listTable);
 
+const friendsTable = document.createElement("table");/*creates the my list table doesnt matter how many movies*/
+friendsTable.innerHTML = "<thead><th>Friends</th><th>Movies Ranked</th></thead>";
+for(display of fArray){
+  const newRow = document.createElement("tr");
+  const name = document.createElement("td");
+  const movieRanked = document.createElement("td");
+  name.textContent = display.name;
+  movieRanked.textContent = display.movieRanked;
+  newRow.appendChild(name);
+  newRow.appendChild(movieRanked);
+  friendsTable.appendChild(newRow);
+}
+const friendsList = document.getElementById('friendsList');
+friendsList.appendChild(friendsTable);
 
 function clickLogin() {
     document.getElementById("loginBox").style.display = 'block';
