@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
-
+    
+    document.getElementById('signupForm').addEventListener('submit', handleSignUp());
+    document.getElementById('loginForm').addEventListener('submit', handleSignIn());
     const searchBar = document.getElementById("search-bar");
     const suggestionsContainer = document.getElementById("suggestions");
     const suggestionsArea = document.getElementById("suggestions-box");
@@ -142,3 +144,60 @@ function clickClose() {
 
 }
 
+
+
+async function handleSignUp(event) {
+    event.preventDefault();
+    const username = document.getElementById('signupUsername').value;
+    const password = document.getElementById('signupPassword').value;
+
+    try {
+        const response = await fetch('http://localhost:3000/api/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, password })
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+            alert(data.message);
+            document.getElementById('signupForm').reset();
+            clickLogin();
+        } else {
+            alert(data.message);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error during sign-up');
+    }
+}
+
+async function handleSignIn(event) {
+    event.preventDefault();
+    const username = document.getElementById('loginUsername').value;
+    const password = document.getElementById('loginPassword').value;
+
+    try {
+        const response = await fetch('http://localhost:3000/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, password })
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+            alert('Login successful!');
+            localStorage.setItem('token', data.token);
+            window.location.href = '/login';
+        } else {
+            alert(data.message);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error during sign-in');
+    }
+}
