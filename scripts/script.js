@@ -222,3 +222,44 @@ function clearQuery() {
     searchBar.value = '';
     searchBar.dispatchEvent(new Event('input'));
 }
+
+function btnLike(){
+	document.getElementById("likeButton").style.background="#32de84";
+}
+
+function btnYellow(){
+	document.getElementById("yellowlikeButton").style.backgroundColor="yellow";
+}
+
+function btnDislike(){
+	document.getElementById("dislikeButton").style.backgroundColor="#fd5c63";
+}
+
+function movePreferBoxLeft(){
+	document.getElementById("movePreferBoxLeft").style.borderColor="gold";
+	document.getElementById("movePreferBoxLeft").style.color="gold";
+}
+
+function movePreferBoxRight(){
+	document.getElementById("movePreferBoxRight").style.borderColor="gold";
+	document.getElementById("movePreferBoxRight").style.color="gold";
+}
+
+function btnReset(){
+	document.getElementById("likeButton").style.background="green";
+	document.getElementById("yellowlikeButton").style.background="gold";
+	document.getElementById("dislikeButton").style.background="#C60C30";
+	document.getElementById("movePreferBoxRight").style.borderColor="black";
+	document.getElementById("movePreferBoxRight").style.color="black";
+	document.getElementById("movePreferBoxLeft").style.borderColor="black";
+	document.getElementById("movePreferBoxLeft").style.color="black";
+	myDiv.style.display= "none"
+}
+
+ function openMoviebox() {
+    if (myDiv.style.display === "none") {
+      myDiv.style.display = "block";
+    } else {
+      myDiv.style.display = "none";
+    }
+  }
