@@ -77,19 +77,19 @@ document.addEventListener("DOMContentLoaded", () => {
             })
             //display the suggestions
             if (filteredMovies.length === 0) {
-                searchBar.style.borderRadius = '18px';
-                suggestionsContainer.style.display = 'none';
-                suggestionsArea.style.display = 'none';
-            } else { //if there are no matches hide suggestions
-                searchBar.style.borderRadius = '18px 18px 0 0';
-                suggestionsContainer.style.display = 'block';
-                suggestionsArea.style.display = 'block'
+                if (searchBar) searchBar.style.borderRadius = '18px';
+                if (suggestionsContainer) suggestionsContainer.style.display = 'none';
+                if (suggestionsArea) suggestionsArea.style.display = 'none';
+            } else {
+                if (searchBar) searchBar.style.borderRadius = '18px 18px 0 0';
+                if (suggestionsContainer) suggestionsContainer.style.display = 'block';
+                if (suggestionsArea) suggestionsArea.style.display = 'block';
             }
         } else {
-            //if the search box is empty hide suggestions
-            searchBar.style.borderRadius = '18px';
-            suggestionsContainer.style.display = 'none';
-            suggestionsArea.style.display = 'none';
+            // If the search box is empty, hide suggestions
+            if (searchBar) searchBar.style.borderRadius = '18px';
+            if (suggestionsContainer) suggestionsContainer.style.display = 'none';
+            if (suggestionsArea) suggestionsArea.style.display = 'none';
         }
     })
 });
@@ -216,4 +216,9 @@ async function handleSignIn(event) {
         console.error('Error:', error);
         alert('Error during sign-in');
     }
+}
+function clearQuery() {
+    const searchBar = document.getElementById('search-bar');
+    searchBar.value = '';
+    searchBar.dispatchEvent(new Event('input'));
 }
