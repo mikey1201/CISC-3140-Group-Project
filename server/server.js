@@ -32,26 +32,24 @@ const readUsersFromFile = () => {
 const writeUsersToFile = (users) => {
     fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2), 'utf8');
 };
-
 app.get('/', (req, res) => {
-  res.sendFile(path.join('C:/Users/adolf/CISC-3140-Group-Project/index.html'));
+    res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
 
 app.get('/styles/stylesheet1.css', (req, res) => {
-  res.sendFile(path.join('C:/Users/adolf/CISC-3140-Group-Project/styles/stylesheet1.css'));
+    res.sendFile(path.join(__dirname, '..', 'styles', 'stylesheet1.css'));
 });
 
 app.get('/scripts/script.js', (req, res) => {
-  res.sendFile(path.join('C:/Users/adolf/CISC-3140-Group-Project/scripts/script.js'));
+    res.sendFile(path.join(__dirname, '..', 'scripts', 'script.js'));
 });
-app.get('/scripts/script.js', (req, res) => {
-  res.sendFile(path.join('C:/Users/adolf/CISC-3140-Group-Project/scripts/script.js'));
-});
+
 app.get('/images/templogo.png', (req, res) => {
-  res.sendFile(path.join('C:/Users/adolf/CISC-3140-Group-Project/images/templogo.png'));
+    res.sendFile(path.join(__dirname, '..', 'images', 'templogo.png'));
 });
+
 app.get('/icon/site.webmanifest', (req, res) => {
-  res.sendFile(path.join('C:/Users/adolf/CISC-3140-Group-Project/icon/site.webmanifest'));
+    res.sendFile(path.join(__dirname, '..', 'icon', 'site.webmanifest'));
 });
 
 
