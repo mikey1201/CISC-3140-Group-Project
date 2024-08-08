@@ -9,6 +9,7 @@ const path = require('path');
 const app = express();
 const port = 3000;
 
+
 app.use(bodyParser.json());
 app.use(cors());
 app.use('/styles', express.static(path.join(__dirname, 'styles')));
@@ -16,9 +17,9 @@ app.use('/scripts', express.static(path.join(__dirname, 'scripts')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/icon', express.static(path.join(__dirname, 'icon')));
 
-
 const usersFilePath = path.join(__dirname, 'data/users.json');
 console.log(usersFilePath);
+
 const readUsersFromFile = () => {
     try {
         const data = fs.readFileSync(usersFilePath, 'utf8');
@@ -28,10 +29,10 @@ const readUsersFromFile = () => {
     }
 };
 
-
 const writeUsersToFile = (users) => {
     fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2), 'utf8');
 };
+
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
@@ -51,36 +52,52 @@ app.get('/images/templogo.png', (req, res) => {
 app.get('/icon/site.webmanifest', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'icon', 'site.webmanifest'));
 });
+app.get('/icon/favicon-16x16.png', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'icon', 'favicon-16x16.png'));
+});
+app.get('/icon/favicon-32x32.png', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'icon', 'favicon-32x32.png'));
+});
 
+app.get('/data/movies', (req, res) => {
+    const moviesFilePath = path.join(__dirname, '..', 'data', 'movies.json');
+    fs.readFile(moviesFilePath, 'utf8', (err, data) => {
+        if (err) {
+            console.error('Error reading movies file:', err);
+            return res.status(500).json({ message: 'Internal server error' });
+        }
+        res.json(JSON.parse(data));
+    });
+});
 
 app.post('/signup', (req, res) => {
-  const username = req.body.username;
-  const password = req.body.password;
+    const username = req.body.username;
+    const password = req.body.password;
 
-  console.log('Received signup request for:', username);
+    console.log('Received signup request for:', username);
 
-  fs.readFile(USERS_FILE, (err, data) => {
-      if (err) {
-          console.error('Error reading users file:', err);
-          return res.status(500).json({ message: 'Internal server error' });
-      }
+    fs.readFile(usersFilePath, (err, data) => {
+        if (err) {
+            console.error('Error reading users file:', err);
+            return res.status(500).json({ message: 'Internal server error' });
+        }
 
-      const users = JSON.parse(data);
-      if (users[username]) {
-          console.log('User already exists:', username);
-          return res.status(400).json({ message: 'User already exists' });
-      }
+        const users = JSON.parse(data);
+        if (users[username]) {
+            console.log('User already exists:', username);
+            return res.status(400).json({ message: 'User already exists' });
+        }
 
-      users[username] = { password };
-      fs.writeFile(USERS_FILE, JSON.stringify(users), (err) => {
-          if (err) {
-              console.error('Error writing to users file:', err);
-              return res.status(500).json({ message: 'Internal server error' });
-          }
-          console.log('User registered successfully:', username);
-          res.status(200).json({ message: 'User registered successfully' });
-      });
-  });
+        users[username] = { password };
+        fs.writeFile(usersFilePath, JSON.stringify(users, null, 2), (err) => {
+            if (err) {
+                console.error('Error writing to users file:', err);
+                return res.status(500).json({ message: 'Internal server error' });
+            }
+            console.log('User registered successfully:', username);
+            res.status(200).json({ message: 'User registered successfully' });
+        });
+    });
 });
 
 app.post('/login', async (req, res) => {
@@ -100,11 +117,9 @@ app.post('/login', async (req, res) => {
 
         const token = jwt.sign({ username: user.username }, 'secretkey', { expiresIn: '1h' });
         res.json({ token });
-        res.redirect('/login')
     } catch (err) {
         res.status(500).json({ message: 'Server error' });
     }
-    
 });
 
 app.listen(port, () => {
