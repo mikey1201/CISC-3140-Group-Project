@@ -97,7 +97,6 @@ function createSuggestionItem(movie) {
 function createRankingArea(movie) {
     const rankingArea = document.createElement('div');
     rankingArea.className = 'ranking-area';
-
     // Add event listener to the parent div
     rankingArea.addEventListener('click', () => {
         document.body.removeChild(rankingArea);
@@ -105,7 +104,21 @@ function createRankingArea(movie) {
 
     const rankingDiv = document.createElement('div');
     rankingDiv.className = 'ranking-div';
-    rankingDiv.textContent = movie;
+
+    const exitButtonDiv = document.createElement('div');
+    exitButtonDiv.className = 'exit-button-div';
+    const exitButton = document.createElement('button');
+    exitButton.className = 'exit-button';
+    exitButton.textContent = '✖';
+    exitButton.addEventListener('click', () => {
+       rankingArea.style.display = 'none';
+    });
+    exitButtonDiv.appendChild(exitButton);
+    rankingDiv.appendChild(exitButtonDiv);
+
+    const movieName = document.createElement('p');
+    movieName.textContent = movie;
+    rankingDiv.appendChild(movieName);
     // Add event listener to the child div to stop event propagation
     rankingDiv.addEventListener('click', (event) => {
         event.stopPropagation();
@@ -149,6 +162,7 @@ function createRankingArea(movie) {
     });
 
     buttonDiv.append(lovedButton,okayButton,hatedButton);
+
     rankingDiv.appendChild(buttonDiv);
 
     rankingArea.appendChild(rankingDiv);

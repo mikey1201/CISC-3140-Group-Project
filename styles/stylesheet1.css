@@ -73,6 +73,42 @@ button:active {
     border: none;
     outline: none;
 }
+#clear-button {
+    background: none;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    color: black;
+    border-radius: 100%;
+    aspect-ratio: 1 / 1;
+    max-height: 36px;
+    padding: 0 11px;
+}
+
+
+.exit-button {
+    background: none;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    color: #374151;
+    border-radius: 100%;
+    aspect-ratio: 1 / 1;
+    max-height: 36px;
+    padding: 0 11px;
+}
+.exit-button:hover {
+    color: #4c5a70;
+    background: #f6f6f6;
+}
+.exit-button:active {
+    background: #ececec;
+}
+.exit-button-div {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
 
 #suggestions {
     width: 100%;
@@ -129,8 +165,8 @@ button:active {
     text-align: center;
     color: #374151;
     font-size: 20px;
-    padding: 2%;
     height: 30%;
+    padding: 0 2%;
     width: 30%;
     background-color: white;
     border-radius: 36px;
@@ -311,7 +347,7 @@ button:active {
 
 th{
   background-color: #374151;
-  font:30px;
+  font-size: 30px;
   color:white;
   width:50%;
   text-align: center;
