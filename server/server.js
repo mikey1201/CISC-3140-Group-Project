@@ -1,127 +1,123 @@
 const express = require('express');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const fs = require('fs');
-const path = require('path');
+const mongoose = require("mongoose");
+const path = require("path");
+const e = require("express");
+const bcrypt = require('bcrypt');
 
 const app = express();
 const port = 3000;
 
+//fetch files from default directory
+app.use(express.static(path.join(__dirname, '..')));
+app.use(express.json());
+//start the database
+mongoose.connect('mongodb://localhost:27017/data');
 
-app.use(bodyParser.json());
-app.use(cors());
-app.use('/styles', express.static(path.join(__dirname, 'styles')));
-app.use('/scripts', express.static(path.join(__dirname, 'scripts')));
-app.use('/images', express.static(path.join(__dirname, 'images')));
-app.use('/icon', express.static(path.join(__dirname, 'icon')));
+const db = mongoose.connection;
 
-const usersFilePath = path.join(__dirname, 'data/users.json');
-console.log(usersFilePath);
+//user schema for database
+const userSchema = new mongoose.Schema({
+    username: {type: String, required: true, unique: true, trim: true,},
+    password: {type: String, required: true,},
+    createdAt: {type: Date, default: Date.now},
+    updatedAt: {type: Date, default: Date.now}
+});
+const movieSchema = new mongoose.Schema({
+   title: {type: String, required: true}
+});
 
-const readUsersFromFile = () => {
+const User = mongoose.model("User", userSchema);
+const Movie = mongoose.model("Movie", movieSchema);
+
+// Route to get all movies
+app.get('/api/movies', async (req, res) => {
     try {
-        const data = fs.readFileSync(usersFilePath, 'utf8');
-        return JSON.parse(data);
-    } catch (err) {
-        return [];
+        const movies = await findAllMovies();
+        res.json(movies);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
-};
-
-const writeUsersToFile = (users) => {
-    fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2), 'utf8');
-};
-
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
 
-app.get('/styles/stylesheet1.css', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'styles', 'stylesheet1.css'));
-});
-
-app.get('/scripts/script.js', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'scripts', 'script.js'));
-});
-
-app.get('/images/templogo.png', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'images', 'templogo.png'));
-});
-
-app.get('/icon/site.webmanifest', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'icon', 'site.webmanifest'));
-});
-app.get('/icon/favicon-16x16.png', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'icon', 'favicon-16x16.png'));
-});
-app.get('/icon/favicon-32x32.png', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'icon', 'favicon-32x32.png'));
-});
-
-app.get('/data/movies', (req, res) => {
-    const moviesFilePath = path.join(__dirname, '..', 'data', 'movies.json');
-    fs.readFile(moviesFilePath, 'utf8', (err, data) => {
-        if (err) {
-            console.error('Error reading movies file:', err);
-            return res.status(500).json({ message: 'Internal server error' });
-        }
-        res.json(JSON.parse(data));
-    });
-});
-
-app.post('/signup', (req, res) => {
-    const username = req.body.username;
-    const password = req.body.password;
-
-    console.log('Received signup request for:', username);
-
-    fs.readFile(usersFilePath, (err, data) => {
-        if (err) {
-            console.error('Error reading users file:', err);
-            return res.status(500).json({ message: 'Internal server error' });
-        }
-
-        const users = JSON.parse(data);
-        if (users[username]) {
-            console.log('User already exists:', username);
-            return res.status(400).json({ message: 'User already exists' });
-        }
-
-        users[username] = { password };
-        fs.writeFile(usersFilePath, JSON.stringify(users, null, 2), (err) => {
-            if (err) {
-                console.error('Error writing to users file:', err);
-                return res.status(500).json({ message: 'Internal server error' });
-            }
-            console.log('User registered successfully:', username);
-            res.status(200).json({ message: 'User registered successfully' });
-        });
-    });
-});
-
-app.post('/login', async (req, res) => {
+// Registration Route
+app.post('/api/register', async (req, res) => {
     const { username, password } = req.body;
 
     try {
-        const users = readUsersFromFile();
-        const user = users.find(user => user.username === username);
-        if (!user) {
-            return res.status(400).json({ message: 'Invalid credentials' });
+        // Check if the username already exists
+        const existingUser = await User.findOne({ username });
+        if (existingUser) {
+            return res.status(400).json({ message: 'Username already exists' });
         }
 
+        // Hash the password before saving it
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Create a new user
+        const newUser = new User({
+            username,
+            password: hashedPassword,
+        });
+
+        await newUser.save();
+        res.status(201).json({ message: 'User registered successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+// Login Route
+app.post('/api/login', async (req, res) => {
+    const { username, password } = req.body;
+
+    try {
+        // Find the user by username
+        const user = await User.findOne({ username });
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid username or password' });
+        }
+
+        // Compare the provided password with the stored hashed password
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(400).json({ message: 'Invalid credentials' });
+            return res.status(400).json({ message: 'Invalid username or password' });
         }
 
-        const token = jwt.sign({ username: user.username }, 'secretkey', { expiresIn: '1h' });
-        res.json({ token });
-    } catch (err) {
-        res.status(500).json({ message: 'Server error' });
+        res.status(200).json({ message: 'Login successful' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 });
 
+const authenticate = (req, res, next) => {
+    if (req.session && req.session.userId) {
+        return next();
+    } else {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+};
+app.get('/api/protected-route', authenticate, (req, res) => {
+    res.json({ message: 'You have access to this route' });
+});
+
+const bodyParser = require('body-parser');
+const session = require('express-session');
+
+app.use(bodyParser.json());
+app.use(session({
+    secret: 'your_secret_key',
+    resave: false,
+    saveUninitialized: true,
+}));
+
+//start the server
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
+
+async function findAllMovies(){
+    try {
+        return await Movie.find();
+    } catch (error) {
+        console.error(error.message);
+    }
+}

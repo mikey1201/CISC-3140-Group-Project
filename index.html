@@ -17,7 +17,6 @@
     <div id="site-header">
         <img id="logo" src="./images/templogo.png" alt="logo">
         <button id="loginbutton" type="button" onclick="clickLogin()">Login</button>
-
     </div>
     <div id="search-area">
         <div id="search-div">
@@ -34,48 +33,28 @@
 		<button onclick="buttonMovies()">My List</button>
 		<button onclick="buttonFriends()">Friends</button>
         </div>
-        <div id="content"></div>
-    </div>
-	<div class="hiddenBox" id="myListChart"></div>
-	<div class="hiddenBox" id="friendsList"></div>
-	
-
-
-    <div class="formbox" id="loginBox">
-        <div>
-          <h1 id="title">Sign in</h1>
-          <button id="closeButton" onclick="clickClose()">X</button>
+        <div id="content">
+            <div class="hiddenBox" id="myListChart"></div>
+            <div class="hiddenBox" id="friendsList"></div>
         </div>
-
-        <form  id="loginform">
-          <div class="inputfield" ><input type="text"  required placeholder="Username"></div>
-          <div class="inputfield"><input type="password" required placeholder="Password"></div>
-          <div id="submit "><input type="submit" value="Log In"></div>
-          <div>
-            <p>don't have account?</p>
-            <button id="signupbutton" type="button" onclick="clickSignUp()">Sign up</button>
-            
-          </div>
-        </form>
     </div>
-
-    <div class="formbox" id="signupBox">
-      <div>
-        <h1 id="title">Sign Up</h1>
-        <button id="closeButton" onclick="clickClose()">X</button>
-      </div>
-
-      <form id="signupform">
-        <div class="inputfield" ><input type="text"  required placeholder="Username"></div>
-        <div class="inputfield"><input type="password" required placeholder="Password"></div>
-        <div id="submit "><input type="submit" value="Sign Up"></div>
-        <div>
-          <p>Already have account?</p>
-          <button id="loginbutton" type="button" onclick="clickLogin()">Login</button>
-          
+    <div id="login-area" onclick="hideLogin()">
+        <div id="login-box">
+            <div id="button-holder">
+                <button id="close-button" onclick="clickClose()">✖</button>
+            </div>
+            <p id="login-box-text">Sign in</p>
+            <form id="credentials-div">
+                <label for="username"></label>
+                <input type="text" id="username" required placeholder="Username">
+                <label for="password"></label>
+                <input type="password" id="password" required placeholder="Password" autocomplete="password">
+                <button id="signIn" type="submit">Sign in</button>
+                <button style="display: none" id="signUp" type="submit">Sign up</button>
+            </form>
+            <p id="account-prompt">Don't have an account?</p>
+            <button id="sign-switch" type="button" onclick="signSwitch()">Sign up</button>
         </div>
-      </form>
-  </div>
-
+    </div>
     <script src="./scripts/script.js"></script>
 </body>

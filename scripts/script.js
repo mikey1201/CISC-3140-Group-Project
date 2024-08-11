@@ -1,21 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    const signupForm = document.getElementById('signupForm');
-    const loginForm = document.getElementById('loginForm');
     const searchBar = document.getElementById("search-bar");
     const suggestionsContainer = document.getElementById("suggestions");
     const suggestionsArea = document.getElementById("suggestions-box");
 
-    if (signupForm) {
-        signupForm.addEventListener('submit', handleSignUp);
-    }
+    const loginBox = document.getElementById('login-box');
+    loginBox.addEventListener('click', (event) => {
+        event.stopPropagation();
+    });
 
-    if (loginForm) {
-        loginForm.addEventListener('submit', handleSignIn);
-    }
     let movies = [];
     // Load movies from JSON file
-    fetch('http://localhost:3000/data/movies')
+    fetch('http://localhost:3000/api/movies')
         .then(response => response.json())
         //get a list of just the movie titles and filter out duplicates
         .then(data => {
@@ -30,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         return true;
                     }
                 });
-            console.log("Unique movie titles:", movies);
         })
         .catch(error => console.error('Error loading movies:', error));
 
@@ -63,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     return 0;
                 }
             }).slice(0, 20); // Limit to 20 suggestions
-            console.log("Filtered movies:", filteredMovies);
+            console.log(filteredMovies);
             //add the titles to the suggestion box
             filteredMovies.forEach(movie => {suggestionsContainer.appendChild(createSuggestionItem(movie));});
 
@@ -111,7 +106,7 @@ function createRankingArea(movie) {
     exitButton.className = 'exit-button';
     exitButton.textContent = '✖';
     exitButton.addEventListener('click', () => {
-       rankingArea.style.display = 'none';
+       document.body.removeChild(rankingArea);
     });
     exitButtonDiv.appendChild(exitButton);
     rankingDiv.appendChild(exitButtonDiv);
@@ -169,6 +164,19 @@ function createRankingArea(movie) {
 
     return rankingArea;
 }
+
+document.getElementById('credentials-div').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    if (document.getElementById('signIn').style.display !== 'none') {
+        handleSignIn(username, password);
+    } else {
+        handleSignUp(username, password);
+    }
+});
+
+
  function buttonMovies() {/*calls the function to create my list*/
     var hiddenBox = document.getElementById("myListChart");
     if (hiddenBox.style.display === "none") {
@@ -220,8 +228,11 @@ const friendsList = document.getElementById('friendsList');
 friendsList.appendChild(friendsTable);
 
 function clickLogin() {
-    document.getElementById("loginBox").style.display = 'block';
-    document.getElementById("signupBox").style.display = 'none';
+    document.getElementById("login-area").style.display = 'flex';
+}
+function hideLogin() {
+    const loginArea = document.getElementById('login-area');
+    loginArea.style.display = 'none';
 }
 
 function clickSignUp() {
@@ -230,20 +241,33 @@ function clickSignUp() {
 }
 
 function clickClose() {
-    document.getElementById("signupBox").style.display = 'none';
-    document.getElementById("loginBox").style.display = 'none';
-
+    document.getElementById("login-area").style.display = 'none';
+}
+function signSwitch() {
+    const signIn = document.getElementById('signIn');
+    const signUp = document.getElementById('signUp');
+    const signSwitchButton = document.getElementById('sign-switch');
+    const loginBoxText = document.getElementById('login-box-text');
+    const accountPrompt = document.getElementById('account-prompt');
+    if (loginBoxText.textContent === 'Sign in') {
+        loginBoxText.textContent = 'Sign up';
+        signUp.style.display = 'block';
+        signIn.style.display = 'none';
+        signSwitchButton.textContent = 'Sign in';
+        accountPrompt.textContent = 'Already have an account?';
+    } else {
+        loginBoxText.textContent = 'Sign in';
+        signUp.style.display = 'none';
+        signIn.style.display = 'block';
+        signSwitchButton.textContent = 'Sign up';
+        accountPrompt.textContent = 'Don\'t have an account?';
+    }
 }
 
-
-
-async function handleSignUp(event) {
-    event.preventDefault();
-    const username = document.getElementById('signupUsername').value;
-    const password = document.getElementById('signupPassword').value;
+async function handleSignUp(username, password) {
     console.log('signing up');
     try {
-        console.log('in try block')
+        console.log('in try block');
         const response = await fetch('http://localhost:3000/api/register', {
             method: 'POST',
             headers: {
@@ -255,7 +279,7 @@ async function handleSignUp(event) {
         const data = await response.json();
         if (response.ok) {
             alert(data.message);
-            document.getElementById('signupForm').reset();
+            document.getElementById('credentials-div').reset();
             clickLogin();
         } else {
             alert(data.message);
@@ -266,13 +290,10 @@ async function handleSignUp(event) {
     }
 }
 
-async function handleSignIn(event) {
-    event.preventDefault();
-    const username = document.getElementById('loginUsername').value;
-    const password = document.getElementById('loginPassword').value;
-
+async function handleSignIn(username, password) {
+    console.log('signing in');
     try {
-        const response = await fetch('http://localhost:3000/login', {
+        const response = await fetch('http://localhost:3000/api/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -284,7 +305,8 @@ async function handleSignIn(event) {
         if (response.ok) {
             alert('Login successful!');
             localStorage.setItem('token', data.token);
-            window.location.href = '/login';
+            //TODO ?? not sure how to handle this
+            window.location.href = '/api/login';
         } else {
             alert(data.message);
         }
