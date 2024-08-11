@@ -1,14 +1,15 @@
 const express = require('express');
 const mongoose = require("mongoose");
 const path = require("path");
-const e = require("express");
 const bcrypt = require('bcrypt');
+const fs = require('fs');
 
 const app = express();
 const port = 3000;
 
 //fetch files from default directory
 app.use(express.static(path.join(__dirname, '..')));
+
 app.use(express.json());
 //start the database
 mongoose.connect('mongodb://localhost:27017/data');
@@ -23,7 +24,8 @@ const userSchema = new mongoose.Schema({
     updatedAt: {type: Date, default: Date.now}
 });
 const movieSchema = new mongoose.Schema({
-   title: {type: String, required: true}
+    title: {type: String, required: true},
+    extract: {type: String}
 });
 
 const User = mongoose.model("User", userSchema);
@@ -110,14 +112,44 @@ app.use(session({
 }));
 
 //start the server
-app.listen(port, () => {
+app.listen(port, async () => {
     console.log(`Server running on http://localhost:${port}`);
+    // Load movies into the database
+    await loadMoviesIntoDatabase();
 });
-
 async function findAllMovies(){
     try {
         return await Movie.find();
     } catch (error) {
         console.error(error.message);
+    }
+}
+
+async function loadMoviesIntoDatabase() {
+    const filePath = path.join(__dirname, '..', 'data', 'movies.json');
+
+    // Check if the file exists
+    if (!fs.existsSync(filePath)) {
+        console.log('movies.json file does not exist.');
+        return;
+    }
+
+    // Read the file
+    const fileContent = fs.readFileSync(filePath, 'utf8');
+    const movies = JSON.parse(fileContent);
+
+    // Check if the database already contains movies
+    const movieCount = await Movie.countDocuments();
+    if (movieCount > 0) {
+        console.log('Movies are already loaded into the database.');
+        return;
+    }
+
+    // Load movies into the database
+    try {
+        await Movie.insertMany(movies);
+        console.log('Movies loaded into the database successfully.');
+    } catch (error) {
+        console.error('Error loading movies into the database:', error);
     }
 }
