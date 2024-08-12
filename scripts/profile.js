@@ -1,12 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const token = localStorage.getItem('token');
 
-  if (!token) {
-      alert("You are not logged in!");
-      window.location.href = '/login.html';
-      return;
-  }
-
   try {
       const response = await fetch('http://localhost:3000/api/profile', {
           headers: {
@@ -16,10 +10,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const data = await response.json();
       if (response.ok) {
-          document.getElementById('user-name').textContent = `${data.firstName} ${data.lastName}`;
+          document.getElementById('user-name').textContent = `data.username`;
           document.getElementById('username').textContent = data.username;
-          document.getElementById('email').textContent = data.email;
-          document.getElementById('joined-date').textContent = new Date(data.joinedDate).toLocaleDateString();
+          
 
           const myListDiv = document.getElementById('my-list');
           data.myList.forEach(movie => {
@@ -36,7 +29,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           });
       } else {
           alert(data.message);
-          window.location.href = '/login.html';
+          window.location.href = '/';
       }
   } catch (error) {
       console.error('Error fetching profile:', error);
