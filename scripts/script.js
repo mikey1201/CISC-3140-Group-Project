@@ -455,28 +455,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (response.ok) {
             const data = await response.json();
             console.log('User info:', data);
+            makeListItems(data.lists.loveIt);
+            makeListItems(data.lists.okay);
+            makeListItems(data.lists.hatedIt);
 
-            // Now you can use the data to update the UI, for example:
-
-
-            data.lists.loveIt.forEach(movie => {
-                const listItem = document.createElement('div');
-                listItem.className = 'list-item';
-                listItem.textContent = movie;
-                document.getElementById('content').appendChild(listItem);
-            });
-            data.lists.okay.forEach(movie => {
-                const listItem = document.createElement('div');
-                listItem.className = 'list-item';
-                listItem.textContent = movie;
-                document.getElementById('content').appendChild(listItem);
-            });
-            data.lists.hatedIt.forEach(movie => {
-                const listItem = document.createElement('div');
-                listItem.className = 'list-item';
-                listItem.textContent = movie;
-                document.getElementById('content').appendChild(listItem);
-            });
         } else {
             console.log('Failed to fetch user info');
             // Handle unauthorized access or errors
@@ -487,7 +469,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-
+function makeListItems(list) {
+    list.forEach(movie => {
+        const listDiv = document.getElementById('list');
+        const listItem = document.createElement('div');
+        listItem.className = 'list-item';
+        listItem.textContent = listDiv.childNodes.length+1 + ' ' + movie;
+        listDiv.appendChild(listItem);
+    });
+}
 async function checkLoginStatus() {
     try {
         const response = await fetch('http://localhost:3000/api/user-info');
