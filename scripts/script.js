@@ -509,14 +509,23 @@ function clearQuery() {
 
 function btnLike(){
 	document.getElementById("likeButton").style.background="#32de84";
+	var x=mArray.length;
+	var object={rank: x+1, movie: 'movieName'};
+	mArray[x]=object;
 }
 
 function btnYellow(){
 	document.getElementById("yellowlikeButton").style.backgroundColor="yellow";
+	var x=mArray.length;
+	var object={rank: x+1, movie: 'movieName'};
+	mArray[x]=object;
 }
 
 function btnDislike(){
 	document.getElementById("dislikeButton").style.backgroundColor="#fd5c63";
+	var x=mArray.length;
+	var object={rank: x+1, movie: 'movieName'};
+	mArray[x]=object;
 }
 
 function movePreferBoxLeft(){
