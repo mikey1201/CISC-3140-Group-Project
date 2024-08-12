@@ -306,7 +306,7 @@ async function handleSignIn(username, password) {
             alert('Login successful!');
             localStorage.setItem('token', data.token);
             //TODO ?? not sure how to handle this
-            window.location.href = '/api/login';
+            window.location.href = `/profile.html?username=${username}`;
         } else {
             alert(data.message);
         }

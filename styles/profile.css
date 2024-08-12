@@ -1,0 +1,35 @@
+#profile-container {
+  width: 60%;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#user-name {
+  text-align: center;
+  font-size: 2em;
+}
+
+#user-info p {
+  margin: 5px 0;
+}
+
+#my-list-section, #my-friends-section {
+  margin-top: 20px;
+}
+
+h2 {
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 5px;
+}
+
+#my-list, #my-friends {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
