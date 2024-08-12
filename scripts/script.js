@@ -1,3 +1,4 @@
+let movie_data = [];
 document.addEventListener("DOMContentLoaded", () => {
 
     const searchBar = document.getElementById("search-bar");
@@ -10,12 +11,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     let movies = [];
+
     // Load movies from JSON file
     fetch('http://localhost:3000/api/movies')
         .then(response => response.json())
         //get a list of just the movie titles and filter out duplicates
         .then(data => {
             const uniqueTitles = new Set();
+            movie_data = data;
             movies = data
                 .map(movie => movie.title)
                 .filter(title => {
@@ -112,8 +115,19 @@ function createRankingArea(movie) {
     rankingDiv.appendChild(exitButtonDiv);
 
     const movieName = document.createElement('p');
+    movieName.id = 'movie-name';
     movieName.textContent = movie;
+    const movieDescriptionDiv = document.createElement('div');
+    movieDescriptionDiv.id = 'movie-description-div';
+    const movieDescription = document.createElement('p');
+    movieDescription.id = 'movie-description';
+    const extract = movie_data.find(m => m.title === movie).extract;
+    if (!extract.includes('null')) {
+        movieDescription.textContent = extract;
+    }
     rankingDiv.appendChild(movieName);
+    movieDescriptionDiv.appendChild(movieDescription);
+    rankingDiv.appendChild(movieDescriptionDiv);
     // Add event listener to the child div to stop event propagation
     rankingDiv.addEventListener('click', (event) => {
         event.stopPropagation();
@@ -135,24 +149,51 @@ function createRankingArea(movie) {
 
     buttonDiv.style.display = 'flex';
 
-    const buttons = [lovedButton,okayButton,hatedButton];
+    const buttons = [lovedButton, okayButton, hatedButton];
     buttons.forEach(button => {
-        button.addEventListener('click', () => {
+        button.addEventListener('click', async () => {
+            console.log('event listener');
             buttonDiv.style.display = 'none';
             const movie1 = document.createElement('button');
             movie1.className = 'choice';
-            movie1.textContent = movie.substring(0,28);
+            movie1.textContent = movie.substring(0, 28);
             const movie2 = document.createElement('button');
             movie2.className = 'choice';
-            /*TODO Need to fetch movies from user list
-                if users list is empty movie should go directly into that part of the list
-                there are to be three separate lists for each user, loved it, okay, and hated it
-             */
-            movie2.textContent = 'filler movie'
+
+            try {
+                console.log('try block');
+                const response = await fetch('http://localhost:3000/api/user-info', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                const data = await response.json(); // Await and parse JSON response
+                console.log(data); // Log the data to see its structure
+
+                const loved = data.lists.loveIt; // Accessing lists from the parsed data
+                const okay = data.lists.okay;
+                const hated = data.lists.hatedIt;
+
+                const bid = button.id;
+                if (bid === 'loved-button') {
+                    rateProcess(loved, movie, movie1, movie2, bid);
+                } else if (bid === 'okay-button') {
+                    rateProcess(okay, movie, movie1, movie2, bid);
+                } else {
+                    rateProcess(hated, movie, movie1, movie2, bid);
+                }
+                console.log('end rate process');
+            } catch (error) {
+                console.log(error.message);
+            }
+
             const choiceDiv = document.createElement('div');
             choiceDiv.id = 'choice-div';
-            choiceDiv.append(movie1,movie2);
+            choiceDiv.append(movie1, movie2);
             rankingDiv.appendChild(choiceDiv);
+            console.log('end of function');
         });
     });
 
@@ -163,6 +204,91 @@ function createRankingArea(movie) {
     rankingArea.appendChild(rankingDiv);
 
     return rankingArea;
+}
+async function rateProcess(list, movie, button1, button2, bid) {
+    if (list.length === 0) {
+        list.push(movie);
+        if (bid === 'loved-button') {
+            await updateUserLists({ loveIt: list });
+        } else if (bid === 'okay-button') {
+            await updateUserLists({ okay: list });
+        } else {
+            await updateUserLists({ hatedIt: list });
+        }
+        console.log('closing menu');
+        window.location.href = '/';
+    } else if (list.includes(movie)) {
+        console.log('closing menu');
+        window.location.href = '/';
+    } else {
+        let choice = null;
+        button1.addEventListener('click', () => {
+            choice = true;
+        });
+        button2.addEventListener('click', () => {
+            choice = false;
+        });
+
+        let low = 0;
+        let high = list.length - 1;
+
+        while (low <= high) {
+            let mid = Math.floor((low + high) / 2);
+            button2.textContent = list[high];
+
+            if (!choice) {
+                list.splice(high + 1, 0, movie);
+                if (bid === 'loved-button') {
+                    await updateUserLists({ loveIt: list });
+                } else if (bid === 'okay-button') {
+                    await updateUserLists({ okay: list });
+                } else {
+                    await updateUserLists({ hatedIt: list });
+                }
+                return list;
+            }
+
+            button2.textContent = list[mid];
+
+            if (choice) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        list.splice(low, 0, movie);
+        if (bid === 'loved-button') {
+            await updateUserLists({ loveIt: list });
+        } else if (bid === 'okay-button') {
+            await updateUserLists({ okay: list });
+        } else {
+            await updateUserLists({ hatedIt: list });
+        }
+    }
+}
+
+async function updateUserLists(newLists) {
+    try {
+        const response = await fetch('http://localhost:3000/api/user/lists', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newLists)
+        });
+
+        const data = await response.json();
+
+        console.log('Response Status:', response.status);
+        if (response.ok) {
+            console.log('Lists updated successfully:', data.lists);
+        } else {
+            console.error('Failed to update lists:', data.message);
+        }
+    } catch (error) {
+        console.error('Error updating lists:', error);
+    }
 }
 
 document.getElementById('credentials-div').addEventListener('submit', function(event) {
@@ -302,19 +428,84 @@ async function handleSignIn(username, password) {
         });
 
         const data = await response.json();
+        console.log(data); // Log the data for debugging
+
         if (response.ok) {
             alert('Login successful!');
-            localStorage.setItem('token', data.token);
-            //TODO ?? not sure how to handle this
-            window.location.href = '/api/login';
+            window.location.href = data.redirectUrl;
         } else {
-            alert(data.message);
+            alert(data.message); // Display the error message from the server
         }
     } catch (error) {
         console.error('Error:', error);
         alert('Error during sign-in');
     }
 }
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        // Fetch user information from the server
+        const response = await fetch('http://localhost:3000/api/user-info', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        // Check if the request was successful
+        if (response.ok) {
+            const data = await response.json();
+            console.log('User info:', data);
+
+            // Now you can use the data to update the UI, for example:
+
+
+            data.lists.loveIt.forEach(movie => {
+                const listItem = document.createElement('div');
+                listItem.className = 'list-item';
+                listItem.textContent = movie;
+                document.getElementById('content').appendChild(listItem);
+            });
+            data.lists.okay.forEach(movie => {
+                const listItem = document.createElement('div');
+                listItem.className = 'list-item';
+                listItem.textContent = movie;
+                document.getElementById('content').appendChild(listItem);
+            });
+            data.lists.hatedIt.forEach(movie => {
+                const listItem = document.createElement('div');
+                listItem.className = 'list-item';
+                listItem.textContent = movie;
+                document.getElementById('content').appendChild(listItem);
+            });
+        } else {
+            console.log('Failed to fetch user info');
+            // Handle unauthorized access or errors
+            window.location.href = '/'; // Redirect to login if not authenticated
+        }
+    } catch (error) {
+        console.error('Error fetching user info:', error);
+    }
+});
+
+
+async function checkLoginStatus() {
+    try {
+        const response = await fetch('http://localhost:3000/api/user-info');
+        if (response.ok) {
+            const data = await response.json();
+            console.log('User is logged in:', data);
+            // Update the UI to reflect the user's logged-in status
+        } else {
+            console.log('User is not logged in');
+            // Redirect to login page or show login UI
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", checkLoginStatus);
+
 function clearQuery() {
     const searchBar = document.getElementById('search-bar');
     searchBar.value = '';
