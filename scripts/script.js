@@ -1,3 +1,6 @@
+let mArray =[];
+let fArray =[];
+
 let movie_data = [];
 document.addEventListener("DOMContentLoaded", () => {
 
