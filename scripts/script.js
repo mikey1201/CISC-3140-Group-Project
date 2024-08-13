@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 });
 
-function createSuggestionItem(movie) {
+function createSuggestionItem(movie) {/*create div for ranking movies*/
     const suggestionItem = document.createElement('div');
     suggestionItem.classList.add('suggestion-item')
     suggestionItem.textContent = movie;
@@ -206,15 +206,16 @@ function createRankingArea(movie) {
     return rankingArea;
 }
 
-function findMovie(list, searchMovie){
+function findMovie(list, searchMovie){/*finds a movie and place a movie in that spot*/
 	for(var x=0; x<list; x++){
 		if(list[x]==searchMovie){
 			list.splice(x, 0, searchMovie);
 		}
 	}
+	return list;
 }
 
-async function rateProcess(list, movie, button1, button2, bid) {
+async function rateProcess(list, movie, button1, button2, bid) {/*the rating process when given the choice od two movies*/
     if (list.length === 0) {
         list.push(movie);
         if (bid === 'loved-button') {
