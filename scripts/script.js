@@ -1,7 +1,7 @@
 let loveArray = [];
 let okayArray = [];
 let hatedArray = [];
-let mArray = [];
+let mArray = [...loveArray, ...okayArray, ... hateArray];
 
 let movie_data = [];
 document.addEventListener("DOMContentLoaded", () => {
