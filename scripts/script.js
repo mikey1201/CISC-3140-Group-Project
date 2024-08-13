@@ -205,6 +205,15 @@ function createRankingArea(movie) {
 
     return rankingArea;
 }
+
+function findMovie(list, searchMovie){
+	for(var x=0; x<list; x++){
+		if(list[x]==searchMovie){
+			list.splice(x, 0, searchMovie);
+		}
+	}
+}
+
 async function rateProcess(list, movie, button1, button2, bid) {
     if (list.length === 0) {
         list.push(movie);
