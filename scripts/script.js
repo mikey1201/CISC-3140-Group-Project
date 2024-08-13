@@ -205,6 +205,15 @@ function createRankingArea(movie) {
 
     return rankingArea;
 }
+
+function findMovie(list, searchMovie){
+	for(var x=0; x<list; x++){
+		if(list[x]==searchMovie){
+			list.splice(x, 0, searchMovie);
+		}
+	}
+}
+
 async function rateProcess(list, movie, button1, button2, bid) {
     if (list.length === 0) {
         list.push(movie);
@@ -506,14 +515,23 @@ function clearQuery() {
 
 function btnLike(){
 	document.getElementById("likeButton").style.background="#32de84";
+	var x=mArray.length;
+	var object={rank: x+1, movie: 'movieName'};
+	mArray[x]=object;
 }
 
 function btnYellow(){
 	document.getElementById("yellowlikeButton").style.backgroundColor="yellow";
+	var x=mArray.length;
+	var object={rank: x+1, movie: 'movieName'};
+	mArray[x]=object;
 }
 
 function btnDislike(){
 	document.getElementById("dislikeButton").style.backgroundColor="#fd5c63";
+	var x=mArray.length;
+	var object={rank: x+1, movie: 'movieName'};
+	mArray[x]=object;
 }
 
 function movePreferBoxLeft(){
