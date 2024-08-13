@@ -8,17 +8,19 @@
 </head>
 <body>
     <div id="profile-container">
+        <button id="backButton">Back</button>
         <h1 id="user-name"></h1>
-        <div id="user-info">
-            <p><strong>Username:</strong> <span id="username"></span></p>
-            <p><strong>Email:</strong> <span id="email"></span></p>
-        </div>
 
         <div id="my-list-section">
             <h2>My List</h2>
             <div id="my-list"></div>
         </div>
 
+        <div id="add-friend-area">
+            <input type="text" id="friendSearch" placeholder="Enter friend's name">
+            <button onclick="searchAndAddFriend()">Search</button>
+            <div id="searchResults"></div>
+        </div>
         <div id="my-friends-section">
             <h2>My Friends</h2>
             <div id="my-friends"></div>

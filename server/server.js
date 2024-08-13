@@ -36,7 +36,8 @@ const userSchema = new mongoose.Schema({
         loveIt: [{ type: String }],
         okay: [{ type: String }],
         hatedIt: [{ type: String }]
-    }
+    },
+    friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
 });
 
 const movieSchema = new mongoose.Schema({
@@ -213,21 +214,70 @@ async function loadMoviesIntoDatabase() {
         console.error('Error loading movies into the database:', error);
     }
 }
+// Route to get user profile
 app.get('/api/profile', authenticate, async (req, res) => {
-    const username = req.user.username;
-
     try {
-        const user = await User.findOne({ username });
+        const user = await User.findById(req.session.userId);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
         res.json({
             username: user.username,
+            lists: user.lists,  
+            friends: [] 
         });
     } catch (err) {
         res.status(500).json({ message: 'Server error' });
     }
 });
+
+app.post('/api/add-friend', authenticate, async (req, res) => {
+    const { friendId } = req.body; // assuming userId is from session and friendId is in the request body
+
+    if (!friendId) {
+        return res.status(400).json({ message: 'Friend ID is required' });
+    }
+
+    try {
+        const user = await User.findById(req.session.userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        if (user.friends.includes(friendId)) {
+            return res.status(400).json({ message: 'Friend already added' });
+        }
+
+        user.friends.push(friendId);
+        await user.save();
+
+        res.status(200).json({ message: 'Friend added successfully' });
+    } catch (error) {
+        console.error('Error adding friend:', error);
+        res.status(500).json({ message: 'Server error while adding friend' });
+    }
+});
+
+
+app.get('/api/search-users', async (req, res) => {
+    const { name } = req.query;
+    if (!name) {
+        return res.status(400).json({ error: 'Name query parameter is required' });
+    }
+
+    try {
+        const users = await User.find({ username: new RegExp(name, 'i') }); 
+        console.log(users);
+        res.json({ users });
+    } catch (error) {
+        console.error('Error searching users:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+
+
+
 
 
