@@ -213,7 +213,7 @@ function findMovieAbove(list, searchMovie, movie){/*finds a suggested movie and 
 			return list;
 		}
 	}
-	list.splice(x+1, 0, movie);/*if not movies found add to bottom and return*/
+	list.splice(x+1, 0, movie);/*if no movies found add and return*/
 	return list;
 }
 
@@ -224,7 +224,7 @@ function findMovieBelow(list, searchMovie, movie){/*finds a suggested movie and 
 			return list;
 		}
 	}
-	list.splice(x+1, 0, movie);/*if not movies found add to bottom and return*/
+	list.splice(x+1, 0, movie);/*if no movies found add and return*/
 	return list;
 }
 
