@@ -206,12 +206,25 @@ function createRankingArea(movie) {
     return rankingArea;
 }
 
-function findMovie(list, searchMovie, movie){/*finds a  suggested movie and place a movie in that spot*/
+function findMovieAbove(list, searchMovie, movie){/*finds a suggested movie and place a movie in that spot*/
 	for(var x=0; x<list; x++){
 		if(list[x] === searchMovie){
 			list.splice(x, 0, movie);
+			return list;
 		}
 	}
+	list.splice(x+1, 0, movie);/*if not movies found add to bottom and return*/
+	return list;
+}
+
+function findMovieBelow(list, searchMovie, movie){/*finds a suggested movie and place a movie below that spot*/
+	for(var x=0; x<list; x++){
+		if(list[x] === searchMovie){
+			list.splice(x+1, 0, movie);
+			return list;
+		}
+	}
+	list.splice(x+1, 0, movie);/*if not movies found add to bottom and return*/
 	return list;
 }
 
