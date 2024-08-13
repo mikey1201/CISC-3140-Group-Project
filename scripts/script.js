@@ -1,5 +1,7 @@
-let mArray =[];
-let fArray =[];
+let loveArray = [];
+let okayArray = [];
+let hatedArray = [];
+let mArray = [];
 
 let movie_data = [];
 document.addEventListener("DOMContentLoaded", () => {
