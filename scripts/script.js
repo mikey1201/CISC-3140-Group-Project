@@ -206,10 +206,10 @@ function createRankingArea(movie) {
     return rankingArea;
 }
 
-function findMovie(list, searchMovie){/*finds a movie and place a movie in that spot*/
+function findMovie(list, searchMovie, movie){/*finds a  suggested movie and place a movie in that spot*/
 	for(var x=0; x<list; x++){
-		if(list[x]==searchMovie){
-			list.splice(x, 0, searchMovie);
+		if(list[x] === searchMovie){
+			list.splice(x, 0, movie);
 		}
 	}
 	return list;
