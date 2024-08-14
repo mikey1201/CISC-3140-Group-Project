@@ -160,6 +160,11 @@ function createRankingArea(movie) {
             const movie2 = document.createElement('button');
             movie2.className = 'choice';
 
+            const movieDiv = document.createElement('div');
+            movieDiv.appendChild(movie1);
+            movieDiv.appendChild(movie2);
+            rankingDiv.appendChild(movieDiv);
+
             try {
                 console.log('try block');
                 const response = await fetch('http://localhost:3000/api/user-info', {
@@ -178,11 +183,11 @@ function createRankingArea(movie) {
 
                 const bid = button.id;
                 if (bid === 'loved-button') {
-                    rateProcess(loved, movie, movie1, movie2, bid);
+                    await rateProcess(loved, movie, movie1, movie2, bid);
                 } else if (bid === 'okay-button') {
-                    rateProcess(okay, movie, movie1, movie2, bid);
+                    await rateProcess(okay, movie, movie1, movie2, bid);
                 } else {
-                    rateProcess(hated, movie, movie1, movie2, bid);
+                    await rateProcess(hated, movie, movie1, movie2, bid);
                 }
                 console.log('end rate process');
             } catch (error) {
@@ -206,79 +211,65 @@ function createRankingArea(movie) {
     return rankingArea;
 }
 
-function findMovie(list, searchMovie, movie){/*finds a suggested movie and place a movie in that spot*/
-	for(var x=0; x<list; x++){
+async function rateProcess(list, movie, button1, button2, bid) {
+    if (list.length === 0) {
+        list.push(movie);
+        await updateUserListsByBid(bid, list);
+        closeMenu();
+    } else if (list.includes(movie)) {
+        closeMenu();
+    } else {
+        let low = 0;
+        let high = list.length - 1;
+
+        function updateButtons(mid) {
+            button1.textContent = movie.substring(0, 28);
+            button2.textContent = list[mid];
+        }
+        function binaryCompare(low, high) {
+            if (low > high) {
+                list.splice(low, 0, movie);
+                updateUserListsByBid(bid, list);
+                closeMenu();
+                return;
+            }
+            let mid = Math.floor((low + high) / 2);
+            updateButtons(mid);
+            button1.onclick = function() {
+                binaryCompare(low, mid - 1);
+            };
+            button2.onclick = function() {
+                binaryCompare(mid + 1, high);
+            };
+        }
+        binaryCompare(low, high);
+    }
+}
+function findMovie(list, searchMovie, movie){
+    let x;
+    /*finds a suggested movie and place a movie in that spot*/
+	for(x = 0; x<list; x++){
 		if(list[x] === 'searchMovie'){
 			list.splice(x, 0, movie);
 			return;
 		}
 	}
 	list.splice(x+1, 0, movie);/*if no movies found add and return*/
-	return;
 }
 
-
-async function rateProcess(list, movie, button1, button2, bid) {/*the rating process when given the choice od two movies*/
-    if (list.length === 0) {
-        list.push(movie);
-        if (bid === 'loved-button') {
-            await updateUserLists({ loveIt: list });
-        } else if (bid === 'okay-button') {
-            await updateUserLists({ okay: list });
-        } else {
-            await updateUserLists({ hatedIt: list });
-        }
-        console.log('closing menu');
-        window.location.href = '/';
-    } else if (list.includes(movie)) {
-        console.log('closing menu');
-        window.location.href = '/';
+async function updateUserListsByBid(bid, list) {
+    if (bid === 'loved-button') {
+        await updateUserLists({ loveIt: list });
+    } else if (bid === 'okay-button') {
+        await updateUserLists({ okay: list });
     } else {
-        let choice = null;
-        button1.addEventListener('click', () => {
-            choice = true;
-        });
-        button2.addEventListener('click', () => {
-            choice = false;
-        });
-
-        let low = 0;
-        let high = list.length - 1;
-
-        while (low <= high) {
-            let mid = Math.floor((low + high) / 2);
-            button2.textContent = list[high];
-
-            if (!choice) {
-                list.splice(high + 1, 0, movie);
-                if (bid === 'loved-button') {
-                    await updateUserLists({ loveIt: list });
-                } else if (bid === 'okay-button') {
-                    await updateUserLists({ okay: list });
-                } else {
-                    await updateUserLists({ hatedIt: list });
-                }
-                return list;
-            }
-
-            button2.textContent = list[mid];
-
-            if (choice) {
-                high = mid - 1;
-            } else {
-                low = mid + 1;
-            }
-        }
-
-        list.splice(low, 0, movie);
-        if (bid === 'loved-button') {
-            await updateUserLists({ loveIt: list });
-        } else if (bid === 'okay-button') {
-            await updateUserLists({ okay: list });
-        } else {
-            await updateUserLists({ hatedIt: list });
-        }
+        await updateUserLists({ hatedIt: list });
     }
+}
+
+function closeMenu() {
+    console.log('closing menu');
+    window.location.href = '/';
 }
 
 async function updateUserLists(newLists) {
@@ -489,7 +480,7 @@ function makeListItems(list) {
         const listDiv = document.getElementById('list');
         const listItem = document.createElement('div');
         listItem.className = 'list-item';
-        listItem.textContent = listDiv.childNodes.length+1 + ' ' + movie;
+        listItem.textContent = listDiv.childNodes.length+1 + '. ' + movie;
         listDiv.appendChild(listItem);
     });
 }
