@@ -394,7 +394,9 @@ document.getElementById('credentials-div').addEventListener('submit', function(e
 
   async function buttonFriends() {
     const friendsList = document.getElementById("friendsList");
+    friendsList.textContent='';
     const list = document.getElementById("list");
+    const friendsMovieList = document.getElementById('friendsMovieList');
       try {
           const response = await fetch('http://localhost:3000/api/friends', {
               method: 'GET',
@@ -405,29 +407,101 @@ document.getElementById('credentials-div').addEventListener('submit', function(e
           });
 
           if (response.ok) {
-              const data = await response.json();
+            const data = await response.json();
 
-              friendsList.innerHTML = '';
+            if (data.friends && data.friends.length > 0) {
+              const ul = document.createElement('ul');
 
               data.friends.forEach(friend => {
-                  const listDiv = document.getElementById('friendsList');
-                  const listItem = document.createElement('div');
-                  listItem.className = 'list-item';
-                  listItem.textContent = listDiv.childNodes.length+1 + '. ' + friend.username;
-                  listDiv.appendChild(listItem);
-              });
+                const li = document.createElement('li');
 
-              friendsList.style.display = "block";
-              list.style.display = "none";
-          } else {
-              console.error('Failed to fetch friends list');
-          }
-      } catch (error) {
-          console.error('Error fetching friends list:', error);
-      }
+                const friendLink = document.createElement('a');
+                friendLink.className = 'list-item';
+                friendLink.href = '#';
+                friendLink.textContent = friend.username;
+
+                friendLink.addEventListener('click', async (event) => {
+                    event.preventDefault();
+                    
+                    const friendName = event.target.textContent.trim();
+                    const encodedName = encodeURIComponent(friendName);
+                    const friendsMovieList = document.getElementById('friendsMovieList');
+
+                    try {
+                        const movieResponse = await fetch(`/api/friends-movie-lists?name=${encodedName}`, {
+                            method: 'GET',
+                            headers: {
+                                'Accept': 'application/json'
+                            }
+                        });
+
+                        if (!movieResponse.ok) {
+                            const errorData = await movieResponse.json();
+                            alert(errorData.message || 'Error fetching friend\'s movie list');
+                            return;
+                        }
+
+                        const movieData = await movieResponse.json();
+                        displayFriendMovieList(movieData.lists, 'friendsMovieList');
+                        friendsMovieList.style.display = 'block';
+                    } catch (error) {
+                        console.error('Error fetching friend\'s movie list:', error);
+                        alert('Error fetching friend\'s movie list');
+                    }
+                });
+
+                li.appendChild(friendLink);
+                ul.appendChild(li);
+                });
+
+                friendsList.appendChild(ul);
+            } else {
+                friendsList.textContent = 'You have no friends added yet.';
+            }
+        } else {
+            console.error('Failed to fetch friends list');
+        }
+    } catch (error) {
+        console.error('Error fetching friends list:', error);
+    }
       list.style.display = 'none';
-      friendsList.style.display = 'block';
+      friendsMovieList.style.display = 'none';
+      if(friendsList.style.display === 'none'){
+        friendsList.style.display = 'block';
+      }else{
+        friendsList.style.display = 'none';
+      }
+      
 }
+
+function displayFriendMovieList(lists, containerId) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = ''; 
+  const friendsList = document.getElementById("friendsList");
+  const list = document.getElementById("list");
+
+  if (lists) {
+    makeFriendListItems(lists.loveIt);
+    makeFriendListItems(lists.okay);
+    makeFriendListItems(lists.hatedIt);
+  } else {
+      container.innerHTML = '<p>No lists available.</p>';
+  }
+  friendsMovieList.style.display = 'block';
+  list.style.display = 'none';
+  friendsList.style.display = 'none';
+}
+
+function makeFriendListItems(list) {
+  list.forEach(movie => {
+      const listDiv = document.getElementById('friendsMovieList');
+      const listItem = document.createElement('div');
+      listItem.className = 'list-item';
+      listItem.textContent = listDiv.childNodes.length+1 + '. ' + movie;
+      listDiv.appendChild(listItem);
+  });
+}
+
 
 closeBtn.addEventListener('click', () => {
     popup.style.display = 'none'; 
@@ -598,6 +672,7 @@ document.addEventListener('DOMContentLoaded', async () => {
  */
 async function buttonMovies() {
     const list = document.getElementById('list');
+    const friendsMovieList = document.getElementById('friendsMovieList');
     list.textContent = "";
     try {
         //fetch user information from the server
@@ -624,8 +699,14 @@ async function buttonMovies() {
     } catch (error) {
         console.error('Error fetching user info:', error);
     }
-    list.style.display = 'block';
+  
     document.getElementById('friendsList').style.display = 'none';
+    friendsMovieList.style.display = 'none';
+    if(list.style.display === 'none'){
+      list.style.display = 'block';
+    }else{
+      list.style.display = 'none';
+    }
 }
 function makeListItems(list) {
     console.log(list);

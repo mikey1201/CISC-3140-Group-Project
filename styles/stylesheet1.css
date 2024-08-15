@@ -166,6 +166,7 @@ button:active {
 }
 #list {
     max-height: 70vh;
+    display: none;
 }
 .list-item:nth-child(odd) {
     background-color: #f8f8f8;
@@ -624,3 +625,25 @@ table{
     border-radius: 20px;
     display: none;
 }
+
+
+#friendsList ul {
+    list-style-type: none;
+    padding: 0;
+}
+  
+#friendsList li {
+    margin: 5px 0;
+}
+  
+#friendsList a {
+    color: black;
+    text-decoration: none;
+    font-size: 16px;
+    display: block;
+}
+  
+#friendsList a:hover {
+    text-decoration: underline;
+}
+  
