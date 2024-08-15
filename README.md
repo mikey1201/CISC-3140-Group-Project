@@ -15,11 +15,14 @@ https://docs.google.com/presentation/d/15hJEZBtsnRDANrSniqalDzRCcW8giDKshxtgBAzv
 
 ## Roles
 Michael: Project Manager,
-  Implemented the search bar, designed the basic home page layout, reworked the backend to assist with database implementation, reworked the login feature and added session tokens, implemented the movie list display, various styling changes.  
+  Implemented the search bar, designed the basic home page layout, reworked the backend to assist with database implementation, reworked the login feature and added session tokens, implemented the movie list display, various styling changes. 
+  
 Adolfo: Backend, 
   Implemented initial backend and account creation feature, created initial log in page, created profile page and friends list feature, implemented add friends and view friends movie list feature, made many backend changes.  
-Joseph: Frontend
+  
+Joseph: Frontend,,
   Created initial design for the user movie list, made a design for the movie ranking menu, wrote logic to display list items on the page, designed pop-up ranking menu, many styling changes.  
+  
 
 ## Getting Started
 To load the repository run this command in your local project directory.
