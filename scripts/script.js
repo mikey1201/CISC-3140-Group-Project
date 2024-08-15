@@ -104,6 +104,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             profileButton.addEventListener('click', () => {
                 window.location.href = `/profile.html?username=${data.username}`;
             });
+            buttonMovies();
+
         } else {
             console.log('Failed to fetch user info');
             window.location.href = '/';
@@ -326,7 +328,7 @@ async function updateUserLists(newLists) {
         console.error('Error updating lists:', error);
     }
 }
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded',  () => {
     console.log('content loaded');
 
     fetch('/session-status')
@@ -376,7 +378,7 @@ document.getElementById('credentials-div').addEventListener('submit', function(e
     }
 });
 
-
+/*
  function buttonMovies() {
     var list = document.getElementById("list");
     var friendsList = document.getElementById("friendsList");
@@ -388,44 +390,43 @@ document.getElementById('credentials-div').addEventListener('submit', function(e
     }
   }
 
+ */
+
   async function buttonFriends() {
-    var friendsList = document.getElementById("friendsList");
-    var list = document.getElementById("list");
+    const friendsList = document.getElementById("friendsList");
+    const list = document.getElementById("list");
+      try {
+          const response = await fetch('http://localhost:3000/api/friends', {
+              method: 'GET',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${localStorage.getItem('token')}`
+              }
+          });
 
-    if (friendsList.style.display === "none") {
-        try {
-            const response = await fetch('http://localhost:3000/api/friends', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
-            });
+          if (response.ok) {
+              const data = await response.json();
 
-            if (response.ok) {
-                const data = await response.json();
-                
-                friendsList.innerHTML = '';
+              friendsList.innerHTML = '';
 
-                data.friends.forEach(friend => {
-                    const listDiv = document.getElementById('friendsList');
-                    const listItem = document.createElement('div');
-                    listItem.className = 'list-item';
-                    listItem.textContent = listDiv.childNodes.length+1 + '. ' + friend.username;
-                    listDiv.appendChild(listItem);
-                });
+              data.friends.forEach(friend => {
+                  const listDiv = document.getElementById('friendsList');
+                  const listItem = document.createElement('div');
+                  listItem.className = 'list-item';
+                  listItem.textContent = listDiv.childNodes.length+1 + '. ' + friend.username;
+                  listDiv.appendChild(listItem);
+              });
 
-                friendsList.style.display = "block";
-                list.style.display = "none";
-            } else {
-                console.error('Failed to fetch friends list');
-            }
-        } catch (error) {
-            console.error('Error fetching friends list:', error);
-        }
-    } else {
-        friendsList.style.display = "none";
-    }
+              friendsList.style.display = "block";
+              list.style.display = "none";
+          } else {
+              console.error('Failed to fetch friends list');
+          }
+      } catch (error) {
+          console.error('Error fetching friends list:', error);
+      }
+      list.style.display = 'none';
+      friendsList.style.display = 'block';
 }
 
 
@@ -554,6 +555,8 @@ async function handleSignIn(username, password) {
         alert('Error during sign-in');
     }
 }
+
+/*
 document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('list').textContent = "";
     try {
@@ -582,13 +585,47 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
+ */
+async function buttonMovies() {
+    const list = document.getElementById('list');
+    list.textContent = "";
+    try {
+        //fetch user information from the server
+        const response = await fetch('http://localhost:3000/api/user-info', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        //check if the request was successful
+        if (response.ok) {
+            const data = await response.json();
+            console.log('User info:', data);
+            makeListItems(data.lists.loveIt);
+            makeListItems(data.lists.okay);
+            makeListItems(data.lists.hatedIt);
+            console.log('finished making list items');
+
+        } else {
+            console.log('Failed to fetch user info');
+            window.location.href = '/';
+        }
+    } catch (error) {
+        console.error('Error fetching user info:', error);
+    }
+    list.style.display = 'block';
+    document.getElementById('friendsList').style.display = 'none';
+}
 function makeListItems(list) {
+    console.log(list);
     list.forEach(movie => {
         const listDiv = document.getElementById('list');
         const listItem = document.createElement('div');
         listItem.className = 'list-item';
         listItem.textContent = listDiv.childNodes.length+1 + '. ' + movie;
         listDiv.appendChild(listItem);
+        console.log('appended item');
     });
 }
 
@@ -598,10 +635,8 @@ async function checkLoginStatus() {
         if (response.ok) {
             const data = await response.json();
             console.log('User is logged in:', data);
-            // Update the UI to reflect the user's logged-in status
         } else {
             console.log('User is not logged in');
-            // Redirect to login page or show login UI
         }
     } catch (error) {
         console.error('Error:', error);

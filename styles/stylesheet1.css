@@ -155,7 +155,7 @@ button:active {
 }
 
 #content {
-    height: 65%;
+    height: 70vh;
     width: 50%;
     background-color: #fff;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
@@ -164,7 +164,9 @@ button:active {
     flex-direction: column;
     overflow-y: auto;
 }
-
+#list {
+    max-height: 70vh;
+}
 .list-item:nth-child(odd) {
     background-color: #f8f8f8;
 }
