@@ -37,7 +37,7 @@ function displayMovieList(lists, containerId) {
     if (lists) {
         const loveItDiv = document.createElement('div');
         loveItDiv.className = 'movie-list love-it';
-        loveItDiv.innerHTML = '<h3>Love It</h3>';
+        loveItDiv.innerHTML = '<h3>Love-It</h3>';
         
         const okayDiv = document.createElement('div');
         okayDiv.className = 'movie-list okay';
@@ -94,8 +94,6 @@ function displayFriendsList(friends, containerId) {
         
         
         friends.forEach(friend => {
-            console.log(friend);
-            console.log(friend.username);
 
             const newli = document.createElement("li");
 

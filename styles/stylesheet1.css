@@ -40,6 +40,13 @@ button:hover {
 button:active {
     background-color: #414d60;
 }
+
+#usernameDisplay {
+    font-size: 2em;
+    margin-left: 20px;
+    font-weight: bold;
+}
+
 #search-area {
     min-height: 36px;
     background-color: #374151;
@@ -149,8 +156,7 @@ button:active {
     flex-direction: column;
     overflow-y: auto;
 }
-#list {
-}
+
 .list-item:nth-child(odd) {
     background-color: #f8f8f8;
 }

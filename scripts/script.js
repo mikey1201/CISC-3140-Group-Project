@@ -1,5 +1,5 @@
 let movie_data = [];
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
 
     const searchBar = document.getElementById("search-bar");
     const suggestionsContainer = document.getElementById("suggestions");
@@ -82,7 +82,37 @@ document.addEventListener("DOMContentLoaded", () => {
             if (suggestionsArea) suggestionsArea.style.display = 'none';
         }
     })
+
+    try {
+        const response = await fetch('http://localhost:3000/api/user-info', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            document.getElementById('loginButton').style.display = 'none';
+            const userNameElement = document.getElementById('usernameDisplay');
+            userNameElement.textContent = `${data.username}`;
+            userNameElement.style.display = 'block';
+
+            const profileButton = document.getElementById('profileButton');
+            profileButton.style.display = 'block';
+            profileButton.addEventListener('click', () => {
+                window.location.href = `/profile.html?username=${data.username}`;
+            });
+        } else {
+            console.log('Failed to fetch user info');
+            window.location.href = '/';
+        }
+    } catch (error) {
+        console.error('Error fetching user info:', error);
+    }
 });
+
 
 function createSuggestionItem(movie) {/*create div for ranking movies*/
     const suggestionItem = document.createElement('div');
@@ -470,15 +500,14 @@ async function handleSignIn(username, password) {
         });
 
         const data = await response.json();
-        console.log(data); // Log the data for debugging
 
         if (response.ok) {
             alert('Login successful!');
             localStorage.setItem('token', data.token);
-            //TODO ?? not sure how to handle this
+            localStorage.setItem('username', data.username);
             window.location.href = `/profile.html?username=${username}`; 
         } else {
-            alert(data.message); // Display the error message from the server
+            alert(data.message);
         }
     } catch (error) {
         console.error('Error:', error);
