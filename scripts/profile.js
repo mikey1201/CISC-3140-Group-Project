@@ -9,27 +9,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
 
         const data = await response.json();
+        console.log(data.friends);
         if (response.ok) {
             document.getElementById('user-name').textContent = data.username;
             
+            displayMovieList(data.lists, 'my-list'); //
+            displayFriendsList(data.friends, 'my-friends');
 
-            const myListDiv = document.getElementById('my-list');
-            if (data.lists && data.lists.loveIt) {
-                data.lists.loveIt.forEach(movie => {
-                    const movieItem = document.createElement('div');
-                    movieItem.textContent = movie;
-                    myListDiv.appendChild(movieItem);
-                });
-            }
-
-            const myFriendsDiv = document.getElementById('my-friends');
-            if (data.friends) {
-                data.friends.forEach(friend => {
-                    const friendItem = document.createElement('div');
-                    friendItem.textContent = friend;
-                    myFriendsDiv.appendChild(friendItem);
-                });
-            }
         } else {
             alert(data.message);
             window.location.href = '/';
@@ -38,12 +24,90 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.error('Error fetching profile:', error);
         alert('Error fetching profile information.');
     }
-    document.getElementById('backButton').addEventListener('click', function(data) {
-        const username = localStorage.getItem('username'); 
-        window.location.href = `/?username=${data.username}`;
-    });
 
+    document.getElementById('backButton').addEventListener('click', function() {
+        window.location.href = '/';
+    });
 });
+
+function displayMovieList(lists, containerId) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = ''; 
+
+    if (lists) {
+        const loveItDiv = document.createElement('div');
+        loveItDiv.className = 'movie-list love-it';
+        loveItDiv.innerHTML = '<h3>Love It</h3>';
+        
+        const okayDiv = document.createElement('div');
+        okayDiv.className = 'movie-list okay';
+        okayDiv.innerHTML = '<h3>Okay</h3>';
+        
+        const hatedItDiv = document.createElement('div');
+        hatedItDiv.className = 'movie-list hated-it';
+        hatedItDiv.innerHTML = '<h3>Hated It</h3>';
+
+        if (lists.loveIt && lists.loveIt.length > 0) {
+            lists.loveIt.forEach(movie => {
+                const movieItem = document.createElement('div');
+                movieItem.textContent = movie;
+                loveItDiv.appendChild(movieItem);
+            });
+        } else {
+            loveItDiv.innerHTML += '<p>No movies in the Love It list.</p>';
+        }
+
+        if (lists.okay && lists.okay.length > 0) {
+            lists.okay.forEach(movie => {
+                const movieItem = document.createElement('div');
+                movieItem.textContent = movie;
+                okayDiv.appendChild(movieItem);
+            });
+        } else {
+            okayDiv.innerHTML += '<p>No movies in the Okay list.</p>';
+        }
+
+        if (lists.hatedIt && lists.hatedIt.length > 0) {
+            lists.hatedIt.forEach(movie => {
+                const movieItem = document.createElement('div');
+                movieItem.textContent = movie;
+                hatedItDiv.appendChild(movieItem);
+            });
+        } else {
+            hatedItDiv.innerHTML += '<p>No movies in the Hated It list.</p>';
+        }
+        container.appendChild(loveItDiv);
+        container.appendChild(okayDiv);
+        container.appendChild(hatedItDiv);
+    } else {
+        container.innerHTML = '<p>No lists available.</p>';
+    }
+}
+
+
+function displayFriendsList(friends, containerId) {
+    const myFriendsDiv = document.getElementById(containerId);
+    myFriendsDiv.innerHTML = ''; 
+
+    if (friends && friends.length > 0) {
+        const ul = document.createElement("ul");
+        
+        
+        friends.forEach(friend => {
+            console.log(friend);
+            console.log(friend.username);
+
+            const newli = document.createElement("li");
+
+            newli.textContent = friend.username;
+            ul.appendChild(newli);
+        });
+
+        myFriendsDiv.appendChild(ul);
+    } else {
+        myFriendsDiv.textContent = 'You have no friends added yet.';
+    }
+}
 
 
 async function addFriend(friendId) {
@@ -53,12 +117,13 @@ async function addFriend(friendId) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ friendId }) // 
+            body: JSON.stringify({ friendId })
         });
 
         const data = await response.json();
         if (response.ok) {
             alert(data.message);
+            location.reload();  // Reload the page to update the friend's list after adding
         } else {
             alert('Error adding friend: ' + data.message);
         }
@@ -105,4 +170,3 @@ async function searchAndAddFriend() {
         alert('Error searching for users');
     }
 }
-

@@ -214,10 +214,10 @@ async function loadMoviesIntoDatabase() {
         console.error('Error loading movies into the database:', error);
     }
 }
-// Route to get user profile
+
 app.get('/api/profile', authenticate, async (req, res) => {
     try {
-        const user = await User.findById(req.session.userId);
+        const user = await User.findById(req.session.userId).populate('friends', 'username');
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -225,7 +225,7 @@ app.get('/api/profile', authenticate, async (req, res) => {
         res.json({
             username: user.username,
             lists: user.lists,  
-            friends: [] 
+            friends: user.friends
         });
     } catch (err) {
         res.status(500).json({ message: 'Server error' });
@@ -275,6 +275,22 @@ app.get('/api/search-users', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+
+app.get('/api/friends', authenticate, async (req, res) => {
+    try {
+        const user = await User.findById(req.session.userId).populate('friends', 'username');
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.json({ friends: user.friends });
+    } catch (err) {
+        console.error('Error fetching friends:', err);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 
 
 

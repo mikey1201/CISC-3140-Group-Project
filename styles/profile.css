@@ -1,35 +1,144 @@
+/* Overall container for the profile page */
 #profile-container {
-  width: 60%;
-  margin: auto;
+  width: 70%;
+  max-width: 1200px;
+  margin: 20px auto;
   padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
+/* Style for the user name */
 #user-name {
   text-align: center;
-  font-size: 2em;
+  font-size: 2.5em;
+  color: #333;
+  margin-bottom: 20px;
+  font-family: 'Arial', sans-serif;
 }
 
-#user-info p {
-  margin: 5px 0;
-}
-
-#my-list-section, #my-friends-section {
+/* Style for sections */
+#my-list-section, #my-friends-section, #add-friend-area {
   margin-top: 20px;
 }
 
 h2 {
-  border-bottom: 2px solid #ccc;
-  padding-bottom: 5px;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 10px;
+  color: #007bff;
+  font-family: 'Arial', sans-serif;
+  margin-bottom: 15px;
 }
 
+/* Style for the list and friends container */
 #my-list, #my-friends {
+  padding: 15px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+#my-list {
+  margin-bottom: 20px;
+}
+
+/* Style for list items */
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  color: #555;
+}
+
+li:last-child {
+  border-bottom: none;
+}
+
+/* Style for buttons */
+button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Style for input field */
+input[type="text"] {
+  padding: 10px;
+  width: calc(100% - 22px);
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* Style for search results */
+#searchResults {
+  margin-top: 20px;
+}
+
+.search-item {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  background-color: #fff;
+}
+
+.search-item button {
+  background-color: #28a745;
+  border: none;
+}
+
+.search-item button:hover {
+  background-color: #218838;
+}
+
+/* Style for the back button */
+#backButton {
+  background-color: #6c757d;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+#backButton:hover {
+  background-color: #5a6268;
+}
+
+#my-list {
+  display: flex;
+  justify-content: space-between;
   margin-top: 10px;
+}
+
+.movie-list {
+  flex: 1;
+  margin: 0 10px;
   padding: 10px;
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.movie-list h3 {
+  margin-top: 0;
+  font-size: 1.2em;
 }

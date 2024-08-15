@@ -316,14 +316,54 @@ document.getElementById('credentials-div').addEventListener('submit', function(e
     }
   }
 
-  function buttonFriends() {/*calls the function to create friend list*/
-    const hiddenBox = document.getElementById("friendsList");
-    if (hiddenBox.style.display === "none") {
-      hiddenBox.style.display = "block";
+  async function buttonFriends() {
+    const friendsList = document.getElementById("friendsList");
+
+    if (friendsList.style.display === "none") {
+        try {
+            const response = await fetch('http://localhost:3000/api/friends', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+
+                
+                friendsList.innerHTML = '';
+
+                const friendsTable = document.createElement("table");
+                friendsTable.innerHTML = "<thead><th>Friends</th></thead>";
+
+                data.friends.forEach(friend => {
+                    console.log(friend);
+                    const newRow = document.createElement("tr");
+
+                    const name = document.createElement("td");
+                    name.textContent = friend.username;
+
+                    newRow.appendChild(name);
+
+                    friendsTable.appendChild(newRow);
+                });
+
+                friendsList.appendChild(friendsTable);
+
+                friendsList.style.display = "block";
+            } else {
+                console.error('Failed to fetch friends list');
+            }
+        } catch (error) {
+            console.error('Error fetching friends list:', error);
+        }
     } else {
-      hiddenBox.style.display = "none";
+        friendsList.style.display = "none";
     }
-  }
+}
+
 
 const listTable = document.createElement("table");/*creates the my list table doesnt matter how many movies*/
 listTable.innerHTML = "<thead><th>Rank</th><th>Movies</th></thead>";
