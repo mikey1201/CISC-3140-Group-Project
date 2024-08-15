@@ -89,7 +89,7 @@ function displayFriendMovieList(lists, containerId,username) {
     const friendsMovieList = document.getElementById('friends-movie-list');
     friendsMovieList.innerHTML = ''; 
     const friendName = document.getElementById('friendName');
-    friendName.textContent = username;
+    friendName.textContent = username +"\'s movie list";
 
     if (lists) {
         const loveItDiv = document.createElement('div');
