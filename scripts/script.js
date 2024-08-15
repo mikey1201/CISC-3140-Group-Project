@@ -171,6 +171,7 @@ function createRankingArea(movie) {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }
                 });
 
@@ -278,6 +279,7 @@ async function updateUserLists(newLists) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
             },
             body: JSON.stringify(newLists)
         });
@@ -294,6 +296,44 @@ async function updateUserLists(newLists) {
         console.error('Error updating lists:', error);
     }
 }
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('content loaded');
+
+    fetch('/session-status')
+        .then(response => response.json())
+        .then(data => {
+            if (data.loggedIn) {
+                console.log('User is logged in');
+                document.getElementById('login-button').style.display = 'none';
+                document.getElementById('logout-button').style.display = 'block';
+            } else {
+                console.log('User is not logged in');
+                document.getElementById('login-button').style.display = 'block';
+                document.getElementById('logout-button').style.display = 'none';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+});
+function logoutUser() {
+    fetch('/api/logout', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (response.ok) {
+                window.location.href = '/';
+            } else {
+                console.error('Logout failed');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
 
 document.getElementById('credentials-div').addEventListener('submit', function(event) {
     event.preventDefault();
@@ -307,17 +347,20 @@ document.getElementById('credentials-div').addEventListener('submit', function(e
 });
 
 
- function buttonMovies() {/*calls the function to create my list*/
-    var hiddenBox = document.getElementById("myListChart");
-    if (hiddenBox.style.display === "none") {
-      hiddenBox.style.display = "block";
+ function buttonMovies() {
+    var list = document.getElementById("list");
+    var friendsList = document.getElementById("friendsList");
+    if (list.style.display === "none") {
+      list.style.display = "block";
+      friendsList.style.display = "none";
     } else {
-      hiddenBox.style.display = "none";
+      list.style.display = "none";
     }
   }
 
   async function buttonFriends() {
-    const friendsList = document.getElementById("friendsList");
+    var friendsList = document.getElementById("friendsList");
+    var list = document.getElementById("list");
 
     if (friendsList.style.display === "none") {
         try {
@@ -331,28 +374,19 @@ document.getElementById('credentials-div').addEventListener('submit', function(e
 
             if (response.ok) {
                 const data = await response.json();
-
                 
                 friendsList.innerHTML = '';
 
-                const friendsTable = document.createElement("table");
-                friendsTable.innerHTML = "<thead><th>Friends</th></thead>";
-
                 data.friends.forEach(friend => {
-                    console.log(friend);
-                    const newRow = document.createElement("tr");
-
-                    const name = document.createElement("td");
-                    name.textContent = friend.username;
-
-                    newRow.appendChild(name);
-
-                    friendsTable.appendChild(newRow);
+                    const listDiv = document.getElementById('friendsList');
+                    const listItem = document.createElement('div');
+                    listItem.className = 'list-item';
+                    listItem.textContent = listDiv.childNodes.length+1 + '. ' + friend.username;
+                    listDiv.appendChild(listItem);
                 });
 
-                friendsList.appendChild(friendsTable);
-
                 friendsList.style.display = "block";
+                list.style.display = "none";
             } else {
                 console.error('Failed to fetch friends list');
             }
@@ -441,7 +475,8 @@ async function handleSignUp(username, password) {
         const response = await fetch('http://localhost:3000/api/register', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
             },
             body: JSON.stringify({ username, password })
         });
@@ -466,7 +501,8 @@ async function handleSignIn(username, password) {
         const response = await fetch('http://localhost:3000/api/login', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
             },
             body: JSON.stringify({ username, password })
         });
@@ -488,12 +524,14 @@ async function handleSignIn(username, password) {
     }
 }
 document.addEventListener('DOMContentLoaded', async () => {
+    document.getElementById('list').textContent = "";
     try {
         // Fetch user information from the server
         const response = await fetch('http://localhost:3000/api/user-info', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
         });
 
@@ -524,6 +562,7 @@ function makeListItems(list) {
         listDiv.appendChild(listItem);
     });
 }
+
 async function checkLoginStatus() {
     try {
         const response = await fetch('http://localhost:3000/api/user-info');
