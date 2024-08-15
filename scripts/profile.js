@@ -84,6 +84,66 @@ function displayMovieList(lists, containerId) {
     }
 }
 
+function displayFriendMovieList(lists, containerId,username) {
+    const container = document.getElementById(containerId);
+    const friendsMovieList = document.getElementById('friends-movie-list');
+    friendsMovieList.innerHTML = ''; 
+    const friendName = document.getElementById('friendName');
+    friendName.textContent = username;
+
+    if (lists) {
+        const loveItDiv = document.createElement('div');
+        loveItDiv.className = 'movie-list love-it';
+        loveItDiv.innerHTML = '<h3>Love-It</h3>';
+        
+        const okayDiv = document.createElement('div');
+        okayDiv.className = 'movie-list okay';
+        okayDiv.innerHTML = '<h3>Okay</h3>';
+        
+        const hatedItDiv = document.createElement('div');
+        hatedItDiv.className = 'movie-list hated-it';
+        hatedItDiv.innerHTML = '<h3>Hated It</h3>';
+
+        if (lists.loveIt && lists.loveIt.length > 0) {
+            lists.loveIt.forEach(movie => {
+                const movieItem = document.createElement('div');
+                movieItem.textContent = movie;
+                loveItDiv.appendChild(movieItem);
+            });
+        } else {
+            loveItDiv.innerHTML += '<p>No movies in the Love It list.</p>';
+        }
+
+        if (lists.okay && lists.okay.length > 0) {
+            lists.okay.forEach(movie => {
+                const movieItem = document.createElement('div');
+                movieItem.textContent = movie;
+                okayDiv.appendChild(movieItem);
+            });
+        } else {
+            okayDiv.innerHTML += '<p>No movies in the Okay list.</p>';
+        }
+
+        if (lists.hatedIt && lists.hatedIt.length > 0) {
+            lists.hatedIt.forEach(movie => {
+                const movieItem = document.createElement('div');
+                movieItem.textContent = movie;
+                hatedItDiv.appendChild(movieItem);
+            });
+        } else {
+            hatedItDiv.innerHTML += '<p>No movies in the Hated It list.</p>';
+        }
+        friendsMovieList.appendChild(loveItDiv);
+        friendsMovieList.appendChild(okayDiv);
+        friendsMovieList.appendChild(hatedItDiv);
+        container.appendChild(friendsMovieList);
+    } else {
+        container.innerHTML = '<p>No lists available.</p>';
+    }
+}
+
+
+
 
 function displayFriendsList(friends, containerId) {
     const myFriendsDiv = document.getElementById(containerId);
@@ -92,12 +152,47 @@ function displayFriendsList(friends, containerId) {
     if (friends && friends.length > 0) {
         const ul = document.createElement("ul");
         
-        
         friends.forEach(friend => {
-
             const newli = document.createElement("li");
+            
+            const friendLink = document.createElement('a');
+            friendLink.href = '#'; 
+            friendLink.textContent = friend.username;
 
-            newli.textContent = friend.username;
+            
+            friendLink.addEventListener('click', async (event) => {
+                event.preventDefault();  
+                
+                const friendName = event.target.textContent.trim(); 
+                const encodedName = encodeURIComponent(friendName); 
+                const friendsMovieSection = document.getElementById('friends-movie-section');
+                try {
+                    const response = await fetch(`/api/friends-movie-lists?name=${encodedName}`, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json' 
+                        }
+                    });
+            
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        alert(errorData.message || 'Error fetching friend\'s movie list');
+                        return;
+                    }
+                    
+                    const data = await response.json();
+                    displayFriendMovieList(data.lists,'friends-movie-section',friend.username);
+                    friendsMovieSection.style.display = 'block';
+                
+
+                } catch (error) {
+                    console.error('Error fetching friend\'s movie list:', error);
+                    alert('Error fetching friend\'s movie list');
+                }
+            });
+            
+
+            newli.appendChild(friendLink);
             ul.appendChild(newli);
         });
 
@@ -106,6 +201,7 @@ function displayFriendsList(friends, containerId) {
         myFriendsDiv.textContent = 'You have no friends added yet.';
     }
 }
+
 
 
 async function addFriend(friendId) {

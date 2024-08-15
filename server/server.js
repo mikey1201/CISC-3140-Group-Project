@@ -298,8 +298,18 @@ app.get('/api/friends', authenticate, async (req, res) => {
 });
 
 
+app.get('/api/friends-movie-lists', authenticate, async (req, res) => {
+    const friendName = req.query.name;
+    console.log(friendName);
+    try {
+        const friend = await User.findOne({ username: friendName }).select('lists');
+        if (!friend) {
+            return res.status(404).json({ message: 'Friend not found' });
+        }
 
-
-
-
-
+        res.json({ lists: friend.lists });
+    } catch (error) {
+        console.error('Error fetching friend\'s movie list:', error);
+        res.status(500).json({ message: 'Server error while fetching friend\'s movie list' });
+    }
+});

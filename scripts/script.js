@@ -428,6 +428,16 @@ document.getElementById('credentials-div').addEventListener('submit', function(e
     }
 }
 
+closeBtn.addEventListener('click', () => {
+    popup.style.display = 'none'; 
+    popupOverlay.style.display = 'none'; 
+});
+
+popupOverlay.addEventListener('click', () => {
+    popup.style.display = 'none'; 
+    popupOverlay.style.display = 'none';
+});
+
 
 const listTable = document.createElement("table");/*creates the my list table doesnt matter how many movies*/
 listTable.innerHTML = "<thead><th>Rank</th><th>Movies</th></thead>";
