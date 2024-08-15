@@ -3,6 +3,9 @@
 ## Overview
 This webapp will allow users to make an account and maintain a personal list of their favorite movies. Users can search for a movie they watched. When a movie is selected they will be prompted to perform a pre-selection; they will be asked whether they loved the movie, thought it was okay, or hated it. After the preselection the user will be prompted to perform direct comparisons to other movies they already added to their list. A movies placement in the list is determined by the result of these direct comparisons.
 
+## Presentation
+https://docs.google.com/presentation/d/15hJEZBtsnRDANrSniqalDzRCcW8giDKshxtgBAzvrDY/edit#slide=id.g2f2fde61483_2_9
+
 ## Roles
 Michael: Project Manager, 
 Adolfo: Backend, 
