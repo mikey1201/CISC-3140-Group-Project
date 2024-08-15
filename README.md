@@ -23,6 +23,8 @@ Adolfo: Backend,
 Joseph: Frontend,
   Created initial design for the user movie list, made a design for the movie ranking menu, wrote logic to display list items on the page, designed pop-up ranking menu, many styling changes.  
   
+## Neeed software
+Need to install node and any needed packages
 
 ## Getting Started
 To load the repository run this command in your local project directory.
