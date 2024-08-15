@@ -112,7 +112,13 @@ app.post('/api/login', async (req, res) => {
         res.status(500).json({ message: 'Server error during login' });
     }
 });
-
+app.get('/session-status', (req, res) => {
+    if (req.session.userId) {
+        res.json({ loggedIn: true });
+    } else {
+        res.json({ loggedIn: false });
+    }
+});
 // Middleware to ensure the user is authenticated before accessing the dashboard
 const authenticate = (req, res, next) => {
     if (req.session && req.session.userId) {
@@ -167,12 +173,12 @@ app.post('/api/user/lists', authenticate, async (req, res) => {
 app.post('/api/logout', (req, res) => {
     req.session.destroy(err => {
         if (err) {
-            return res.status(500).json({ message: 'Error logging out' });
+            return res.status(500).json({ message: 'Logout failed' });
         }
-        res.json({ message: 'Logout successful' });
+        res.clearCookie('connect.sid'); // Assuming you're using express-session
+        res.status(200).json({ message: 'Logout successful' });
     });
 });
-
 // Start the server
 app.listen(port, async () => {
     console.log(`Server running on http://localhost:${port}`);

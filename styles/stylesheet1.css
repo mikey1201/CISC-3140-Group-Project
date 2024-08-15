@@ -5,7 +5,7 @@ body {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    overflow-y: hidden;
+    overflow: hidden;
 }
 
 #logo {
@@ -135,18 +135,19 @@ button:active {
     flex-direction: column;
     align-items: center;
     padding-top: 2%;
-    gap: 2%;
+    gap: 4%;
+    margin-bottom: 2%;
 }
 
 #content {
-    height: 80%;
+    height: 65%;
     width: 50%;
     background-color: #fff;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
     border-radius: 2px;
     display: flex;
     flex-direction: column;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 #list {
 }

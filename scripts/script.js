@@ -294,7 +294,44 @@ async function updateUserLists(newLists) {
         console.error('Error updating lists:', error);
     }
 }
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('content loaded');
 
+    fetch('/session-status')
+        .then(response => response.json())
+        .then(data => {
+            if (data.loggedIn) {
+                console.log('User is logged in');
+                document.getElementById('login-button').style.display = 'none';
+                document.getElementById('logout-button').style.display = 'block';
+            } else {
+                console.log('User is not logged in');
+                document.getElementById('login-button').style.display = 'block';
+                document.getElementById('logout-button').style.display = 'none';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+});
+function logoutUser() {
+    fetch('/api/logout', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (response.ok) {
+                window.location.href = '/';
+            } else {
+                console.error('Logout failed');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
 document.getElementById('credentials-div').addEventListener('submit', function(event) {
     event.preventDefault();
     const username = document.getElementById('username').value;
@@ -489,15 +526,14 @@ async function handleSignIn(username, password) {
 }
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        // Fetch user information from the server
+        //fetch user information from the server
         const response = await fetch('http://localhost:3000/api/user-info', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             }
         });
-
-        // Check if the request was successful
+        //check if the request was successful
         if (response.ok) {
             const data = await response.json();
             console.log('User info:', data);
@@ -507,8 +543,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         } else {
             console.log('Failed to fetch user info');
-            // Handle unauthorized access or errors
-            window.location.href = '/'; // Redirect to login if not authenticated
+            window.location.href = '/';
         }
     } catch (error) {
         console.error('Error fetching user info:', error);
