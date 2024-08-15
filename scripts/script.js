@@ -326,6 +326,44 @@ async function updateUserLists(newLists) {
         console.error('Error updating lists:', error);
     }
 }
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('content loaded');
+
+    fetch('/session-status')
+        .then(response => response.json())
+        .then(data => {
+            if (data.loggedIn) {
+                console.log('User is logged in');
+                document.getElementById('loginButton').style.display = 'none';
+                document.getElementById('logout-button').style.display = 'block';
+            } else {
+                console.log('User is not logged in');
+                document.getElementById('loginButton').style.display = 'block';
+                document.getElementById('logout-button').style.display = 'none';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+});
+function logoutUser() {
+    fetch('/api/logout', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (response.ok) {
+                window.location.href = '/';
+            } else {
+                console.error('Logout failed');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
 
 document.getElementById('credentials-div').addEventListener('submit', function(event) {
     event.preventDefault();
@@ -505,7 +543,9 @@ async function handleSignIn(username, password) {
             alert('Login successful!');
             localStorage.setItem('token', data.token);
             localStorage.setItem('username', data.username);
-            window.location.href = `/profile.html?username=${username}`; 
+            var logoutButton = document.getElementById('logout-button');
+            logoutButton.style.display = 'block';
+            window.location.href = `/index.html?username=${username}`; 
         } else {
             alert(data.message);
         }

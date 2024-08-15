@@ -16,9 +16,12 @@
 <body>
     <div id="site-header">
         <img id="logo" src="./images/templogo.png" alt="logo">
-        <button type="button" id="loginButton" onclick="clickLogin()">Login</button>
         <span class="hiddenBox" id="usernameDisplay"></span> 
+        <div id="profile-logout-button">
         <button class="hiddenBox" id="profileButton" type="button"">Profile</button>
+        <button class="hiddenBox" id="logout-button" type="button" onclick="logoutUser()">Log out</button>
+        <button type="button" id="loginButton" onclick="clickLogin()">Login</button>
+        </div>
     </div>
     <div id="search-area">
         <div id="search-div">
