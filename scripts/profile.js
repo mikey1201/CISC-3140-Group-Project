@@ -250,7 +250,10 @@ async function searchAndAddFriend() {
         data.users.forEach(user => {
             const userDiv = document.createElement('div');
             userDiv.className = 'search-item';
-            userDiv.textContent = user.username;
+            const userName = document.createElement('div');
+            userName.textContent = user.username;
+            userDiv.appendChild(userName);
+            //userDiv.textContent = user.username;
 
             const addButton = document.createElement('button');
             addButton.textContent = 'Add Friend';
